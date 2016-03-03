@@ -54,3 +54,10 @@ v3 v3::minus(v3 b){
     v3 v (x - b.x, y - b.y, z - b.z);
     return v;
 }
+
+std::string v3::to_str(){
+    std::ostringstream strs;
+    strs << "< " << x << " " << y << " " << z << " >";
+    std::string str = strs.str();
+    return str;
+}

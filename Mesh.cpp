@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <math.h>
 
-Mesh::Mesh(v3 center) : center(center){}
-Mesh::Mesh(v3 center, std::vector<Triangle> triangles): center(center), triangles(triangles) {}
+Mesh::Mesh(v3 center, Phong p) : center(center), phong(p) {}
+Mesh::Mesh(v3 center, Phong p, std::vector<Triangle> triangles): center(center), phong(p), triangles(triangles) {}
 
 /* Instance Methods  */
 std::vector<Triangle> Mesh::generate_unit_sphere(int width, int height){
@@ -83,28 +83,38 @@ std::vector<Triangle> Mesh::generate_unit_sphere(int width, int height){
     }
     
     return mesh;
-    // The index buffer has now been generated. Here's how to use to determine
-    // the vertices of a triangle. Suppose you want to determine the vertices
-    // of triangle i, with 0 <= i < gNumTriangles. Define:
-    //
-    // k0 = gIndexBuffer[3*i + 0]
-    // k1 = gIndexBuffer[3*i + 1]
-    // k2 = gIndexBuffer[3*i + 2]
-    //
-    // Now, the vertices of triangle i are at positions k0, k1, and k2 (in that
-    // order) in the vertex array (which you should allocate yourself at line
-    // 27).
-    //
-    // Note that this assumes 0-based indexing of arrays (as used in C/C++,
-    // Java, etc.) If your language uses 1-based indexing, you will have to
-    // add 1 to k0, k1, and k2.
 }
 void Mesh::set_triangles( std::vector<Triangle> triangles){
     this->triangles = triangles;
 }
 
+int Mesh::num_triangles(){
+    return this->triangles.size();
+}
+
+void Mesh::add_triangle(Triangle t){
+    this->triangles.push_back(t);
+}
+
 /* Virutal Methods */
 v3 Mesh::get_ortho(v3 *point){ return v3(); }
 v3 Mesh::get_point_above(v3 *point){ return v3(); }
-bool Mesh::is_reflective(){ return true; }
-void Mesh::transform(mat transform){}
+bool Mesh::is_reflective(){ return false; }
+
+Phong Mesh::get_phong(){ return this->phong; }
+
+/* returns a string with all the triangles */
+std::string Mesh::to_str(){
+    std::stringstream ss;
+    for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
+        ss << it->to_str();
+    }
+    return ss.str();
+}
+
+/* Iterate over the triangles in the mesh and transform them */
+void Mesh::transform(mat t_mat){
+    for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
+        //it.transform(t_mat);
+    }
+}

@@ -1,6 +1,8 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 #include <armadillo>
+#include <sstream>
+#include <string>
 class v3
 {
 public:
@@ -20,6 +22,7 @@ public:
     v3 multiply(v3 b);
     v3 cross(v3 b);
     double Magnitude();
+    std::string to_str();
     
     /* Support for armadillo operations - get the one that makes the most sense */
     //rowvec3 get_rowvec();
