@@ -22,9 +22,16 @@ bool Triangle::is_reflective(){}
 
 Phong Triangle::get_phong(){ return this->phong; }
 
-void Triangle::transform(mat transform)
+void Triangle::transform(mat t_mat)
 {
-    //TODO choose either the rowvec or columnvec to multiply by.
+    if (t_mat.n_cols == 4 && t_mat.n_rows == 4){
+        //this is a 4x4
+        p1 = p1.transform_4(t_mat);
+        p2 = p2.transform_4(t_mat);
+        p3 = p3.transform_4(t_mat);
+    } else if (t_mat.n_cols == 3 && t_mat.n_rows == 3) {
+        //this is a 3x3
+    }
 }
 
 std::string Triangle::to_str(){
