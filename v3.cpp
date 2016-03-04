@@ -61,3 +61,19 @@ std::string v3::to_str(){
     std::string str = strs.str();
     return str;
 }
+
+v3 v3::transform_4(mat44 t_mat){
+    colvec4 operand = {x, y, z, 1};
+    colvec4 product = t_mat * operand;
+    return v3(product[0], product[1], product[1]);
+}
+
+colvec4 v3::get_colvec4(){
+    colvec4 c = {x, y, z, 1};
+    return c;
+}
+
+rowvec4 v3::get_rowvec4(){
+    rowvec4 r = {x, y, z, 1};
+    return r;
+}

@@ -32,10 +32,10 @@ int unit_tests(){
     Mesh m2 = Mesh( v3(0,0,0) , p, triangles);
     
     //transform my matrices
-    mat transform = RoomObject::uniform_scale_transform(2);
+    mat t_mat = RoomObject::uniform_scale_transform(2);
     
-    m1.transform(transform);
-    m2.transform(transform);
+    m1.transform(t_mat);
+    m2.transform(t_mat);
     
     //Let's see what we got
     std::cout << m1.to_str();

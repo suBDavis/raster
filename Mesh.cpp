@@ -115,6 +115,6 @@ std::string Mesh::to_str(){
 /* Iterate over the triangles in the mesh and transform them */
 void Mesh::transform(mat t_mat){
     for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
-        //it.transform(t_mat);
+        it->transform(t_mat);
     }
 }

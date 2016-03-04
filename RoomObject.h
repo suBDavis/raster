@@ -19,14 +19,15 @@ public:
     virtual void transform(mat transform) = 0;
     virtual std::string to_str() = 0;
     
+    /* Static Methods */
     static mat44 uniform_scale_transform(double k){
-        /* takes a scalar k */
+        /* takes a scalar k and returns a 4x4 homogeneous matrix */
         mat44 t= {{ k, 0, 0, 0 },
                   { 0, k, 0, 0 },
                   { 0, 0, k, 0 },
                   { 0, 0, 0, 1 }};
         return t;
-     }
+    }
 };
 
 #endif // ROOMOBJECT_H

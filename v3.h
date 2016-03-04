@@ -3,6 +3,8 @@
 #include <armadillo>
 #include <sstream>
 #include <string>
+using namespace arma;
+
 class v3
 {
 public:
@@ -27,8 +29,10 @@ public:
     /* Support for armadillo operations - get the one that makes the most sense */
     //rowvec3 get_rowvec();
     //colvec3 get_colvec();
-    //rowvec4 get_rowvec4();
-    //colvec4 get_colvec4();
+    rowvec4 get_rowvec4();
+    colvec4 get_colvec4();
+    
+    v3 transform_4(mat44 t_mat);
     
 
 private:
