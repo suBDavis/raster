@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 
+/* comment to test mode stuff */
 Mesh::Mesh(v3 center, Phong p) : center(center), phong(p) {}
 Mesh::Mesh(v3 center, Phong p, std::vector<Triangle> triangles): center(center), phong(p), triangles(triangles) {}
 
