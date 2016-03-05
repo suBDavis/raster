@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "Triangle.h"
 #include "Phong.h"
+#include "Room.h"
 using namespace arma;
 
 /* Method Declarations */
@@ -42,7 +43,18 @@ int unit_tests(){
     
     std::cout << "----" << std::endl;
     
-    std::cout << m2.to_str();
+    //std::cout << m2.to_str();
+    
+    //Create a camera
+    mat44 camera = mat44 {{1,0,0,0},
+                          {0,1,0,0},
+                          {0,0,1,0},
+                          {0,0,0,1}};
+    //Create a room maybe?
+    Room room = Room(camera, -.1, .1, -.1, .1, -.1, -1000, v3(0,0,0));
+    Renderer renderer = Renderer(512, 512, 1);
+    
+    room.rasterize(renderer);
     
     return 0;
 }

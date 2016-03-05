@@ -5,12 +5,21 @@ v3::v3(){
     x = 0.0;
     y = 0.0;
     z = 0.0;
+    c = 1.0;
 }
 
 v3::v3(double xi, double yi, double zi){
     x = xi;
     y = yi;
     z = zi;
+    c = 1.0;
+}
+
+v3::v3(double xi, double yi, double zi, double ci){
+    x = xi;
+    y = yi;
+    z = zi;
+    c = ci;
 }
 
 v3 v3::Scale (double scalar){
@@ -63,17 +72,17 @@ std::string v3::to_str(){
 }
 
 v3 v3::transform_4(mat44 t_mat){
-    colvec4 operand = {x, y, z, 1};
+    colvec4 operand {x, y, z, c};
     colvec4 product = t_mat * operand;
-    return v3(product[0], product[1], product[1]);
+    return v3(product(0), product(1), product(2), product(3));
 }
 
 colvec4 v3::get_colvec4(){
-    colvec4 c = {x, y, z, 1};
-    return c;
+    colvec4 cv {x, y, z, c};
+    return cv;
 }
 
 rowvec4 v3::get_rowvec4(){
-    rowvec4 r = {x, y, z, 1};
-    return r;
+    rowvec4 rv {x, y, z, c};
+    return rv;
 }

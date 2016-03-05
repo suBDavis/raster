@@ -11,10 +11,12 @@ public:
     double x;
     double y;
     double z;
+    double c; //the extra one
 
     v3();
     ~v3(){}
     v3(double x, double y, double z);
+    v3(double xi, double yi, double zi, double ci);
     v3 Scale (double scalar);
     double dot(v3 b);
     v3 Unit();

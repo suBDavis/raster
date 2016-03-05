@@ -1,4 +1,6 @@
 #include "Triangle.h"
+#include <stdio.h>
+#include <stdexcept>
 
 Triangle::Triangle( v3 triple[3] ){
     p1 = triple[0];
@@ -29,8 +31,10 @@ void Triangle::transform(mat t_mat)
         p1 = p1.transform_4(t_mat);
         p2 = p2.transform_4(t_mat);
         p3 = p3.transform_4(t_mat);
-    } else if (t_mat.n_cols == 3 && t_mat.n_rows == 3) {
-        //this is a 3x3
+        
+    } else {
+        //this is something else
+        throw std::invalid_argument( "Received Matrix of Wrong Size" );
     }
 }
 
