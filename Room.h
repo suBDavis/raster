@@ -22,7 +22,7 @@ public:
 private:
     void transform(mat44 trans);
     void rasterize(Renderer* r);
-    void draw_one_triangle(Triangle t, Renderer* r);
+    void draw_one_triangle(Triangle t, std::vector<std::vector<double>> *depth, Renderer* r);
     double compute_edge(v3 a, v3 b, v3 p);
     vector<RoomObject*> objs;
     vector<Light> lights;

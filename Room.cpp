@@ -27,6 +27,15 @@ void Room::draw(Renderer *r){
      * Iterate over the objects, and raster bottom to top
      */
      
+     //set the depth buffer
+     std::vector<std::vector<double>> depth(r->getWidth(), std::vector<double>(r->getHeight()));
+     for (int i = 0; i < depth.size(); ++i)
+     {
+         for (int j = 0; j < depth[i].size(); ++j)
+         {
+             depth[i][j] = std::abs(f);
+         }
+     }
      for (unsigned int i = 0; i < objs.size(); i++){
          //for every object in the room
          std::vector<Triangle> triangles = objs[i]->get_triangles();
@@ -37,15 +46,14 @@ void Room::draw(Renderer *r){
              //Tell the triangles to project themselves into the view plane
              current.project();
              //draw the triangle to the renderer
-             draw_one_triangle(current, r);
+             draw_one_triangle(current, &depth, r);
          }
      }
 }
 
-void Room::draw_one_triangle(Triangle t, Renderer *r){
+void Room::draw_one_triangle(Triangle t, std::vector<std::vector<double>> *depth, Renderer *r){
     
-    //set the depth buffer
-    double** depth;
+    std::vector<std::vector<double>> d = *depth;
     
     int minx = std::min({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
     int maxx = std::max({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
@@ -61,8 +69,11 @@ void Room::draw_one_triangle(Triangle t, Renderer *r){
             double e2 = compute_edge( t.p2, t.p3, p);
             double e3 = compute_edge( t.p3, t.p1, p);
             
-            if ( e1 >= 0 && e2 >= 0 && e3 >= 0){
-                r->set_pixel(i, j, v3(255, 255, 255));
+            if ( std::abs(t.p1.z) < d[i][j] ){
+                d[i][j] = std::abs(t.p1.z);
+                if ( e1 >= 0 && e2 >= 0 && e3 >= 0){
+                    r->set_pixel(i, j, v3(255, 255, 255));
+                }
             } else {
                 r->set_pixel(i, j, v3(0,0,0));
             }
