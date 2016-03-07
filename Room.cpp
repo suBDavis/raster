@@ -1,6 +1,7 @@
 #include "Room.h"
 #include <stdexcept>
 #include <stdio.h>
+#include <cstdlib>
 
 //cam is the transform matrix for putting the camera into world space
 Room::Room(mat44 cam, double left, double right, double bottom, double top, double n, double f, v3 bg): 
@@ -8,10 +9,11 @@ cam(cam), left(left), right(right), bottom(bottom), top(top), n(n), f(f), bg(bg)
 
 /*
  * Code for the renderer derived from...
- * Triangle Raster      : http://www.cs.cornell.edu/courses/cs4620/2010fa/lectures/07pipeline.pdf
- * Transformations      : http://www.cs.cornell.edu/courses/cs4620/2012fa/lectures/11viewing.pdf
- * General Overview     : http://www.codinglabs.net/article_world_view_projection_matrix.aspx
- * More Triangle Raster : http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/lecture-notes/MIT6_837F12_Lec21.pdf
+ * Triangle Raster      | http://www.cs.cornell.edu/courses/cs4620/2010fa/lectures/07pipeline.pdf
+ * Transformations      | http://www.cs.cornell.edu/courses/cs4620/2012fa/lectures/11viewing.pdf
+ * General Overview     | http://www.codinglabs.net/article_world_view_projection_matrix.aspx
+ * More Triangle Raster | http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/lecture-notes/MIT6_837F12_Lec21.pdf
+ * More Triangle Raster | https://www.cs.unc.edu/xcms/courses/comp770-s07/Lecture08.pdf
  */ 
 
 void Room::draw(Renderer *r){
@@ -26,35 +28,28 @@ void Room::draw(Renderer *r){
      * 
      * Iterate over the objects, and raster bottom to top
      */
-     
-     //set the depth buffer
-     std::vector<std::vector<double>> depth(r->getWidth(), std::vector<double>(r->getHeight()));
-     for (int i = 0; i < depth.size(); ++i)
-     {
-         for (int j = 0; j < depth[i].size(); ++j)
-         {
-             depth[i][j] = std::abs(f);
-         }
-     }
-     
-     //Variables we'll set in the loop
-     //Triangle t;
-     //v3 p;
-     //int minx;
-     //int miny;
-     //int maxx;
-     //int maxy;
-     
-     for (unsigned int i = 0; i < objs.size(); i++){
+    
+    //set the depth buffer
+    const int numrows = r->getHeight();
+    const int numcols = r->getWidth();
+    double *depth = new double [numrows * numcols];
+    
+    for (unsigned int col = 0; col < numcols; col++)
+        for (unsigned int row = 0; row < numrows; row++)
+            depth[numcols * row + col] = std::abs(f);
+
+    for (unsigned int i = 0; i < objs.size(); i++)
+    {
         //for every object in the room
         std::vector<Triangle> triangles = objs[i]->get_triangles();
          
-        for (unsigned int tr = 0; tr < triangles.size(); tr++){
+        for (unsigned int tr = 0; tr < triangles.size(); tr++)
+        {
             //for every triangle in the object
             Triangle t = triangles[tr];
+            
             //Tell the triangles to project themselves into the view plane
             t.project();
-            
              
             //draw the triangle to the renderer
             int minx = std::min({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
@@ -62,27 +57,31 @@ void Room::draw(Renderer *r){
             int miny = std::min({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             
-            v3 color = v3(minx, maxy, 200);
+            v3 color = v3 (255, 255, 255);
             
             //For now we can assume the triangle is within the box.
-            for (int j = miny; j <= maxy; j++){
-                for (int i = minx; i <= maxx; i++){
-                    //for every pixel on the screen
+            for (int j = miny; j <= maxy; j++)
+            {
+                for (int i = minx; i <= maxx; i++)
+                {
+                    //for every pixel in the bounding box
                     v3 p = v3(i, j, 0);
                     double e1 = compute_edge( t.p1, t.p2, p);
                     double e2 = compute_edge( t.p2, t.p3, p);
                     double e3 = compute_edge( t.p3, t.p1, p);
                     
-                    if ( e1 >= 0 && e2 >= 0 && e3 >= 0 ){
-                        if ( std::abs(t.p1.z) <= depth[i][j] ){
-                            depth[i][j] = std::abs(t.p1.z);
+                    int dex = j * numcols + i;
+                    if ( e1 >= 0 && e2 >= 0 && e3 >= 0 )
+                    {
+                        if ( std::abs(t.p1.z) <= depth[dex] )
+                        {
+                            depth[dex] = std::abs(t.p1.z);
                             r->set_pixel(i, j, color);
                         }
-                    } else {
-//                        if ( std::abs(t.p1.z) < depth[i][j] ){
-//                            depth[i][j] = std::abs(t.p1.z);
-//                            r->set_pixel(i, j, v3(0,0,0));
-//                        }
+                    } 
+                    else 
+                    {
+                        //the triangle was not in the view frame
                     }
                 }
             }
@@ -90,15 +89,17 @@ void Room::draw(Renderer *r){
     }
 }
 
-double Room::compute_edge(v3 b, v3 a, v3 p){
+double Room::compute_edge(v3 b, v3 a, v3 p)
+{
     return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
-    //return (a.y - b.y) * p.x + (b.x - a.x) * p.y + (a.x*b.y - b.x-a.y);
 }
 
-void Room::rasterize(Renderer *r){
+void Room::rasterize(Renderer *r)
+{
     //Step 0 - Object Space to World Space transform - Already Done.
     
-    if (objs.size() == 0 ){
+    if (objs.size() == 0 )
+    {
         //verify that we have objects to render.
         throw std::logic_error("No objects to render");
     }
@@ -131,25 +132,28 @@ void Room::rasterize(Renderer *r){
      * Get this information from the renderer.
      * 
      */ 
-     double nx = r->getWidth();  // usually 512
-     double ny = r->getHeight(); // usually 512
-     mat44 viewport = {
-     {nx/2, 0,    0,  (nx-1)/2 },
-     {0,    ny/2, 0,  (ny-1)/2 },
-     {0,    0,    1,  0        },
-     {0,    0,    0,  1        }
-     };
-     this->transform(viewport);
-     
+    double nx = r->getWidth();  // usually 512
+    double ny = r->getHeight(); // usually 512
+    mat44 viewport = {
+    {nx/2, 0,    0,  (nx-1)/2 },
+    {0,    ny/2, 0,  (ny-1)/2 },
+    {0,    0,    1,  0        },
+    {0,    0,    0,  1        }
+    };
+    this->transform(viewport);
+
 }
 
-void Room::addObject(RoomObject* obj){
+void Room::addObject(RoomObject* obj)
+{
     objs.push_back(obj);
 }
-void Room::addLight(Light l){
+void Room::addLight(Light l)
+{
     lights.push_back(l);
 }
-void Room::transform(mat44 trans){
+void Room::transform(mat44 trans)
+{
     //transforms everything in the room except for the camera.
     for(unsigned int i = 0; i < objs.size(); i++) {
         objs[i]->transform(&trans);

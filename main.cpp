@@ -67,11 +67,11 @@ int unit_tests(){
     room.addObject(&m3);
     room.addObject(&m4);
     
-    Renderer renderer = Renderer(1024, 1024, 1);
+    Renderer renderer = Renderer(512, 512, 1);
     
     room.draw(&renderer);
     
-    renderer.render_ppm("out.ppm");
+    renderer.render_ppm("./Images/out.ppm");
     
     return 0;
 }
