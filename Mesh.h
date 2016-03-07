@@ -21,9 +21,10 @@ public:
     virtual v3 get_ortho(v3 *point);
     virtual v3 get_point_above(v3 *point);
     virtual bool is_reflective();
-    virtual void transform(mat transform);
+    virtual void transform(mat *transform);
     virtual Phong get_phong();
     virtual std::string to_str();
+    virtual std::vector<Triangle> get_triangles();
     
     /* static method to generate a unit sphere centered at 0 0 0*/
     static std::vector<Triangle> generate_unit_sphere(int width, int height);

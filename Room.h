@@ -15,13 +15,15 @@ public:
     Room(mat44 cam, double left, double right, double bottom, double top, double near, double far, v3 bg);
     ~Room(){}
     
-    void addObject(RoomObject* obj);
+    void addObject(RoomObject *obj);
     void addLight(Light l);
-    void rasterize(Renderer r);
+    void draw(Renderer* r);
 
 private:
     void transform(mat44 trans);
-
+    void rasterize(Renderer* r);
+    void draw_one_triangle(Triangle t, Renderer* r);
+    double compute_edge(v3 a, v3 b, v3 p);
     vector<RoomObject*> objs;
     vector<Light> lights;
     
@@ -30,8 +32,8 @@ private:
     double right;
     double bottom;
     double top;
-    double near;
-    double far;
+    double n;
+    double f;
     mat44 cam;
     double step_x;
     double step_y;

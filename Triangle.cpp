@@ -1,19 +1,12 @@
 #include "Triangle.h"
 #include <stdio.h>
 #include <stdexcept>
+#include <vector>
 
 Triangle::Triangle( v3 triple[3] ){
     p1 = triple[0];
     p2 = triple[1];
     p3 = triple[2];
-    phong = Phong();
-}
-
-Triangle::Triangle( v3 triple[3] , Phong p){
-    p1 = triple[0];
-    p2 = triple[1];
-    p3 = triple[2];
-    phong = p;
 }
 
 v3 Triangle::get_ortho(v3 *point){}
@@ -21,8 +14,6 @@ v3 Triangle::get_ortho(v3 *point){}
 v3 Triangle::get_point_above(v3 *point){}
 
 bool Triangle::is_reflective(){}
-
-Phong Triangle::get_phong(){ return this->phong; }
 
 void Triangle::transform(mat t_mat)
 {
@@ -37,6 +28,20 @@ void Triangle::transform(mat t_mat)
         throw std::invalid_argument( "Received Matrix of Wrong Size" );
     }
 }
+
+
+void Triangle::project(){
+    
+     mat44 p1t = Triangle::nonuniform_scale_transform( 1/p1.c, 1/p1.c, 1);
+     mat44 p2t = Triangle::nonuniform_scale_transform( 1/p2.c, 1/p2.c, 1);
+     mat44 p3t = Triangle::nonuniform_scale_transform( 1/p3.c, 1/p3.c, 1);
+     
+     p1 = p1.transform_4(p1t);
+     p2 = p2.transform_4(p2t);
+     p3 = p3.transform_4(p3t);
+}
+
+
 
 std::string Triangle::to_str(){
     std::stringstream ss;

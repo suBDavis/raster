@@ -72,17 +72,25 @@ std::string v3::to_str(){
 }
 
 v3 v3::transform_4(mat44 t_mat){
-    colvec4 operand {x, y, z, c};
+    colvec4 operand = {x, y, z, c};
     colvec4 product = t_mat * operand;
+//    if (product(3) == -7 && c==1){
+//        std::cout << "operand --" << std::endl;
+//        operand.print();
+//        std::cout << "product --" << std::endl;
+//        product.print();
+//        std::cout << "t_mat --" <<std::endl;
+//        t_mat.print();
+//    }
     return v3(product(0), product(1), product(2), product(3));
 }
 
 colvec4 v3::get_colvec4(){
-    colvec4 cv {x, y, z, c};
+    colvec4 cv = {x, y, z, c};
     return cv;
 }
 
 rowvec4 v3::get_rowvec4(){
-    rowvec4 rv {x, y, z, c};
+    rowvec4 rv = {x, y, z, c};
     return rv;
 }

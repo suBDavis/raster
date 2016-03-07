@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include <sstream>
 
 Renderer::Renderer(int width, int height, double gamma): 
 width(width), height(height), gamma(gamma)
@@ -62,14 +63,16 @@ void Renderer::render_ppm(const char *filename){
     std::cout << "Rendered to file " << filename << std::endl;
 }
 int Renderer::getHeight(){
-    return height * sample_index;
+    return height;
 }
 int Renderer::getWidth(){
-    return width * sample_index;
+    return width;
 }
 
 std::string Renderer::to_ppm(v3 color){
-    
+    std::stringstream ss;
+    ss << color.x << " " << color.y << " " << color.z;
+    return ss.str();
 }
 
 Renderer::~Renderer()

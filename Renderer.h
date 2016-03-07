@@ -25,8 +25,6 @@ private:
     double normalized_top_color;
     int width;
     int height;
-    bool antialias;
-    int sample_index;
     double gamma;
     v3 *pixels;
 };
