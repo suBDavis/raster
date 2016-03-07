@@ -54,12 +54,15 @@ void Room::draw(Renderer *r){
             Triangle t = triangles[tr];
             //Tell the triangles to project themselves into the view plane
             t.project();
+            
              
             //draw the triangle to the renderer
             int minx = std::min({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
             int maxx = std::max({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
             int miny = std::min({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
+            
+            v3 color = v3(minx, maxy, 200);
             
             //For now we can assume the triangle is within the box.
             for (int j = miny; j <= maxy; j++){
@@ -71,15 +74,15 @@ void Room::draw(Renderer *r){
                     double e3 = compute_edge( t.p3, t.p1, p);
                     
                     if ( e1 >= 0 && e2 >= 0 && e3 >= 0 ){
-                        if ( std::abs(t.p1.z) < depth[i][j] ){
+                        if ( std::abs(t.p1.z) <= depth[i][j] ){
                             depth[i][j] = std::abs(t.p1.z);
-                            r->set_pixel(i, j, v3(255, 255, 255));
+                            r->set_pixel(i, j, color);
                         }
                     } else {
-                        if ( std::abs(t.p1.z) < depth[i][j] ){
-                            depth[i][j] = std::abs(t.p1.z);
-                            r->set_pixel(i, j, v3(0,0,0));
-                        }
+//                        if ( std::abs(t.p1.z) < depth[i][j] ){
+//                            depth[i][j] = std::abs(t.p1.z);
+//                            r->set_pixel(i, j, v3(0,0,0));
+//                        }
                     }
                 }
             }
@@ -87,8 +90,9 @@ void Room::draw(Renderer *r){
     }
 }
 
-double Room::compute_edge(v3 a, v3 b, v3 p){
+double Room::compute_edge(v3 b, v3 a, v3 p){
     return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
+    //return (a.y - b.y) * p.x + (b.x - a.x) * p.y + (a.x*b.y - b.x-a.y);
 }
 
 void Room::rasterize(Renderer *r){

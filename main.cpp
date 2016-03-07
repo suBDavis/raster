@@ -56,12 +56,18 @@ int unit_tests(){
     mat44 translation_mat = RoomObject::translate_transform( v3(0,0,-7) );
     m3.transform(&translation_mat);
     
+    Mesh m4 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
+    //m3.transform(&t_mat);
+    translation_mat = RoomObject::translate_transform( v3(0,0,-9) );
+    m4.transform(&translation_mat);
+    
     
     Room room = Room(camera, -.1, .1, -.1, .1, -.1, -1000, v3(0,0,0));
     
     room.addObject(&m3);
+    room.addObject(&m4);
     
-    Renderer renderer = Renderer(512, 512, 1);
+    Renderer renderer = Renderer(1024, 1024, 1);
     
     room.draw(&renderer);
     
