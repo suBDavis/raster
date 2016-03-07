@@ -15,7 +15,7 @@ cam(cam), left(left), right(right), bottom(bottom), top(top), n(n), f(f), bg(bg)
  */ 
 
 void Room::draw(Renderer *r){
-   
+    
     /*
      * PART 1 - transform room onto 2D viewscreen
      */ 
@@ -36,46 +36,52 @@ void Room::draw(Renderer *r){
              depth[i][j] = std::abs(f);
          }
      }
+     
+     //Variables we'll set in the loop
+     //Triangle t;
+     //v3 p;
+     //int minx;
+     //int miny;
+     //int maxx;
+     //int maxy;
+     
      for (unsigned int i = 0; i < objs.size(); i++){
-         //for every object in the room
-         std::vector<Triangle> triangles = objs[i]->get_triangles();
+        //for every object in the room
+        std::vector<Triangle> triangles = objs[i]->get_triangles();
          
-         for (unsigned int t = 0; t < triangles.size(); t++){
-             //for every triangle in the object
-             Triangle current = triangles[t];
-             //Tell the triangles to project themselves into the view plane
-             current.project();
-             //draw the triangle to the renderer
-             draw_one_triangle(current, &depth, r);
-         }
-     }
-}
-
-void Room::draw_one_triangle(Triangle t, std::vector<std::vector<double>> *depth, Renderer *r){
-    
-    std::vector<std::vector<double>> d = *depth;
-    
-    int minx = std::min({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
-    int maxx = std::max({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
-    int miny = std::min({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
-    int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
-    
-    //For now we can assume the triangle is within the box.
-    for (int j = miny; j <= maxy; j++){
-        for (int i = minx; i <= maxx; i++){
-            //for every pixel on the screen
-            v3 p = v3(i, j, 0);
-            double e1 = compute_edge( t.p1, t.p2, p);
-            double e2 = compute_edge( t.p2, t.p3, p);
-            double e3 = compute_edge( t.p3, t.p1, p);
+        for (unsigned int tr = 0; tr < triangles.size(); tr++){
+            //for every triangle in the object
+            Triangle t = triangles[tr];
+            //Tell the triangles to project themselves into the view plane
+            t.project();
+             
+            //draw the triangle to the renderer
+            int minx = std::min({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
+            int maxx = std::max({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
+            int miny = std::min({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
+            int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             
-            if ( std::abs(t.p1.z) < d[i][j] ){
-                d[i][j] = std::abs(t.p1.z);
-                if ( e1 >= 0 && e2 >= 0 && e3 >= 0){
-                    r->set_pixel(i, j, v3(255, 255, 255));
+            //For now we can assume the triangle is within the box.
+            for (int j = miny; j <= maxy; j++){
+                for (int i = minx; i <= maxx; i++){
+                    //for every pixel on the screen
+                    v3 p = v3(i, j, 0);
+                    double e1 = compute_edge( t.p1, t.p2, p);
+                    double e2 = compute_edge( t.p2, t.p3, p);
+                    double e3 = compute_edge( t.p3, t.p1, p);
+                    
+                    if ( e1 >= 0 && e2 >= 0 && e3 >= 0 ){
+                        if ( std::abs(t.p1.z) < depth[i][j] ){
+                            depth[i][j] = std::abs(t.p1.z);
+                            r->set_pixel(i, j, v3(255, 255, 255));
+                        }
+                    } else {
+                        if ( std::abs(t.p1.z) < depth[i][j] ){
+                            depth[i][j] = std::abs(t.p1.z);
+                            r->set_pixel(i, j, v3(0,0,0));
+                        }
+                    }
                 }
-            } else {
-                r->set_pixel(i, j, v3(0,0,0));
             }
         }
     }
