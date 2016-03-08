@@ -14,6 +14,7 @@ cam(cam), left(left), right(right), bottom(bottom), top(top), n(n), f(f), bg(bg)
  * General Overview     | http://www.codinglabs.net/article_world_view_projection_matrix.aspx
  * More Triangle Raster | http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/lecture-notes/MIT6_837F12_Lec21.pdf
  * More Triangle Raster | https://www.cs.unc.edu/xcms/courses/comp770-s07/Lecture08.pdf
+ *
  */ 
 
 void Room::draw(Renderer *r){
@@ -71,6 +72,7 @@ void Room::draw(Renderer *r){
                     double e3 = compute_edge( t.p3, t.p1, p);
                     
                     int dex = j * numcols + i;
+                    
                     if ( e1 >= 0 && e2 >= 0 && e3 >= 0 )
                     {
                         if ( std::abs(t.p1.z) <= depth[dex] )
@@ -155,10 +157,9 @@ void Room::addLight(Light l)
 void Room::transform(mat44 trans)
 {
     //transforms everything in the room except for the camera.
-    for(unsigned int i = 0; i < objs.size(); i++) {
+    for(unsigned int i = 0; i < objs.size(); i++)
         objs[i]->transform(&trans);
-    }
-    for(unsigned int i = 0; i < lights.size(); i++) {
+        
+    for(unsigned int i = 0; i < lights.size(); i++)
         lights[i].transform(trans);
-    }
 }
