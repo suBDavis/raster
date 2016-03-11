@@ -154,9 +154,14 @@ void Room::addLight(Light l)
 {
     lights.push_back(l);
 }
+
+/* 
+ * Refactor this code to return a new copy instead of modifying the copy in memory
+ * We will need to be able to ask the world model about its lighting
+ */ 
 void Room::transform(mat44 trans)
 {
-    //transforms everything in the room except for the camera.
+    //transforms every object in the room, and returns the transformed version.
     for(unsigned int i = 0; i < objs.size(); i++)
         objs[i]->transform(&trans);
         
