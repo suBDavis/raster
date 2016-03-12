@@ -14,7 +14,6 @@ cam(cam), left(left), right(right), bottom(bottom), top(top), n(n), f(f), bg(bg)
  * General Overview     | http://www.codinglabs.net/article_world_view_projection_matrix.aspx
  * More Triangle Raster | http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/lecture-notes/MIT6_837F12_Lec21.pdf
  * More Triangle Raster | https://www.cs.unc.edu/xcms/courses/comp770-s07/Lecture08.pdf
- *
  */ 
 
 void Room::draw(Renderer *r){
@@ -61,24 +60,24 @@ void Room::draw(Renderer *r){
             v3 color = v3 (255, 255, 255);
             
             //For now we can assume the triangle is within the box.
-            for (int j = miny; j <= maxy; j++)
+            for (int jy = miny; jy <= maxy; jy++)
             {
-                for (int i = minx; i <= maxx; i++)
+                for (int ix = minx; ix <= maxx; ix++)
                 {
                     //for every pixel in the bounding box
-                    v3 p = v3(i, j, 0);
+                    v3 p = v3(ix, jy, 0);
                     double e1 = compute_edge( t.p1, t.p2, p);
                     double e2 = compute_edge( t.p2, t.p3, p);
                     double e3 = compute_edge( t.p3, t.p1, p);
                     
-                    int dex = j * numcols + i;
+                    int dex = jy * numcols + ix;
                     
                     if ( e1 >= 0 && e2 >= 0 && e3 >= 0 )
                     {
                         if ( std::abs(t.p1.z) <= depth[dex] )
                         {
                             depth[dex] = std::abs(t.p1.z);
-                            r->set_pixel(i, j, color);
+                            r->set_pixel(ix, jy, color);
                         }
                     } 
                     else 

@@ -1,6 +1,8 @@
 #include "Mesh.h"
 #include <stdio.h>
 #include <math.h>
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
 
 /* comment to test mode stuff */
 Mesh::Mesh(v3 center, Phong p) : center(center), phong(p) {}
@@ -84,6 +86,62 @@ std::vector<Triangle> Mesh::generate_unit_sphere(int width, int height){
     }
     
     return mesh;
+}
+std::vector<Triangle> Mesh::load_from_file(const char* path){
+    
+    std::string inputfile = path;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::vector<Triangle> obj_mesh;
+    std::vector<v3> all_vertices;
+
+    std::string err;
+    bool ret = tinyobj::LoadObj(shapes, materials, err, inputfile.c_str());
+
+    if (!err.empty()) { // `err` may contain warning message.
+      std::cerr << err << std::endl;
+    }
+    
+    std::cout << "Loaded " << path << " from file." << std::endl;
+    std::cout << "# of shapes    : " << shapes.size() << std::endl;
+    std::cout << "# of materials : " << materials.size() << std::endl;
+    
+    for (size_t i = 0; i < shapes.size(); i++) {
+
+        size_t indexOffset = 0;
+        for (size_t n = 0; n < shapes[i].mesh.num_vertices.size(); n++) {
+            int ngon = shapes[i].mesh.num_vertices[n];
+            for (size_t f = 0; f < ngon; f++) {
+                unsigned int v = shapes[i].mesh.indices[indexOffset + f];
+                printf("  face[%ld] v[%ld] = (%f, %f, %f)\n", n,
+                    shapes[i].mesh.positions[3*v+0],
+                    shapes[i].mesh.positions[3*v+1],
+                    shapes[i].mesh.positions[3*v+2]);
+                
+                all_vertices.push_back( v3((double)shapes[i].mesh.positions[3*v+0], (double)shapes[i].mesh.positions[3*v+1], (double)shapes[i].mesh.positions[3*v+2]) );
+
+            }
+        indexOffset += ngon;
+        }
+
+    }
+    std::cout << all_vertices.size() << std::endl;
+    
+    for (unsigned int v = 0; v < all_vertices.size() / 3; v++){
+        v3 triangle_vertices[3] = {
+            all_vertices[v*3+0],
+            all_vertices[v*3+1],
+            all_vertices[v*3+2]
+        };
+        printf( "%f, %f \n",triangle_vertices[0].x ,triangle_vertices[0].y);
+        Triangle t = Triangle( triangle_vertices );
+        obj_mesh.push_back(t);
+    }
+    
+    std::cout << obj_mesh.size() << std::endl;
+    
+    
+    return obj_mesh;
 }
 void Mesh::set_triangles( std::vector<Triangle> triangles){
     this->triangles = triangles;

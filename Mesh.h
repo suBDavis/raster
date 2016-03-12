@@ -28,6 +28,8 @@ public:
     
     /* static method to generate a unit sphere centered at 0 0 0*/
     static std::vector<Triangle> generate_unit_sphere(int width, int height);
+    /* static method to load a mesh from an obj file */
+    static std::vector<Triangle> load_from_file(const char* path);
     /* set triangle vector to the input */
     void set_triangles( std::vector<Triangle> triangles);
     /* just find out how many triangles are in the mesh */
