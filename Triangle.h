@@ -15,7 +15,7 @@ public:
     Triangle( v3 triple[3] );
     ~Triangle(){}
     
-    v3 get_ortho(v3 *point);
+    v3 get_ortho();
     v3 get_point_above(v3 *point);
     bool is_reflective();
     void transform(mat t_mat);
@@ -35,6 +35,8 @@ public:
     v3 p1;
     v3 p2;
     v3 p3;
+    
+    v3 flat_color;
 };
 
 #endif // TRIANGLE_H

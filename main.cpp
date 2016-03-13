@@ -21,6 +21,7 @@ int main(int argc, char **argv)
 }
 
 int unit_tests(){
+    Light l1 = Light(v3(-4,4,4), v3(.2,.2,.2));    
     Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(1, 1, 1) , 1);
     mat t_mat = RoomObject::uniform_scale_transform(2);
 
@@ -48,10 +49,11 @@ int unit_tests(){
     
     //room.addObject(&m3);
     room.addObject(&m4);
+    room.addLight(l1);
     
     Renderer renderer = Renderer(512, 512, 1);
     
-    room.draw(&renderer);
+room.draw(&renderer, 0);
     
     renderer.render_ppm("../Images/out.ppm");
     

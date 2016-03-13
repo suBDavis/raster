@@ -16,12 +16,13 @@ cam(cam), left(left), right(right), bottom(bottom), top(top), n(n), f(f), bg(bg)
  * More Triangle Raster | https://www.cs.unc.edu/xcms/courses/comp770-s07/Lecture08.pdf
  */ 
 
-void Room::draw(Renderer *r){
+/* Takes a renderer and the shader mode (0 = none, 1 = flat, 2 = Gorard, 3 = Phong) */
+void Room::draw(Renderer *r, int shader_mode){
     
     /*
      * PART 1 - transform room onto 2D viewscreen
      */ 
-    this->rasterize(r);
+    this->rasterize(r, shader_mode);
     
     /*
      * Part 2 - draw the viewscreen to the renderer
@@ -77,7 +78,7 @@ void Room::draw(Renderer *r){
                         if ( std::abs(t.p1.z) <= depth[dex] )
                         {
                             depth[dex] = std::abs(t.p1.z);
-                            r->set_pixel(ix, jy, color);
+                            r->set_pixel(ix, jy, t.flat_color);
                         }
                     } 
                     else 
@@ -95,9 +96,19 @@ double Room::compute_edge(v3 b, v3 a, v3 p)
     return (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
 }
 
-void Room::rasterize(Renderer *r)
+/* shader mode (0 = none, 1 = flat, 2 = Gorard, 3 = Phong) */
+void Room::rasterize(Renderer *r, int shader_mode)
 {
-    //Step 0 - Object Space to World Space transform - Already Done.
+    /*
+     * Step 0 - shade the lil' triangles
+     * Objects are already in world space.
+     * 
+     */ 
+    v3 camera = v3 (cam[8], cam[9], cam[10]);
+    for (int i = 0; i < this->objs.size(); i++){
+        objs[i]->shade(shader_mode, &lights, &camera);
+    }
+    
     
     if (objs.size() == 0 )
     {

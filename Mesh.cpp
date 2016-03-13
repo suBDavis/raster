@@ -161,6 +161,47 @@ v3 Mesh::get_point_above(v3 *point){ return v3(); }
 bool Mesh::is_reflective(){ return false; }
 Phong Mesh::get_phong(){ return this->phong; }
 std::vector<Triangle> Mesh::get_triangles(){ return triangles; }
+
+/* shades all the triangles in the mesh */
+void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
+    for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
+        
+        v3 norm = it->get_ortho();
+        v3 I;
+        v3 Ia; //ambient
+        v3 Id; //diffuse
+        v3 Is; //specular
+        
+        //iterate over all the lights
+        for (std::vector<Light>::iterator li = lights->begin(); li != lights->end(); ++li){
+            
+            //I did a nasty thing by just picking a point at random.
+            v3 vector_to_light = li->point.minus(it->p1).Unit();
+            
+            //Ambient Lighting
+            v3 li_color = li->color;
+            Ia = Ia.add(v3(phong.ka.x * li_color.x, 
+                           phong.ka.y * li_color.y,
+                           phong.ka.z * li_color.z));
+            //Diffuse Lighting
+            double dot = norm.dot(vector_to_light);
+            if (dot >= 0){
+                Id = Id.add(v3(phong.kd.x * dot * li_color.x,
+                                phong.kd.y * dot * li_color.y,
+                                phong.kd.z * dot * li_color.z));
+            } else {
+                Id = Id.add(v3(0,0,0));
+            }
+            
+            I = I.add(Ia).add(Id);
+            
+        }
+        
+        //set the flat color of the triangle.
+        it->flat_color = I;
+    }
+}
+
 /* returns a string with all the triangles */
 std::string Mesh::to_str(){
     std::stringstream ss;

@@ -25,6 +25,7 @@ public:
     virtual Phong get_phong();
     virtual std::string to_str();
     virtual std::vector<Triangle> get_triangles();
+    virtual void shade(int shader_mode, std::vector<Light> *lights, v3 *camera);
     
     /* static method to generate a unit sphere centered at 0 0 0*/
     static std::vector<Triangle> generate_unit_sphere(int width, int height);

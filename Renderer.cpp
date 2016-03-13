@@ -53,7 +53,7 @@ void Renderer::render_ppm(const char *filename){
             if (top_color == 0){
                 myfile << " 0 0 0 ";
             } else {
-                myfile << to_ppm(pcolor) << " ";
+                myfile << to_ppm(pcolor, top_color, normalized_top_color) << " ";
             }
         }
         myfile << "\n";
@@ -73,6 +73,22 @@ std::string Renderer::to_ppm(v3 color){
     std::stringstream ss;
     ss << color.x << " " << color.y << " " << color.z;
     return ss.str();
+}
+
+std::string Renderer::to_ppm(v3 color, double oldmax, double newmax){
+    double gamma = 1.0;
+    //step 1: normalize to between 0 and 1
+    double ri = pow(color.x / oldmax, 1/gamma) * newmax;
+    double gi = pow(color.y / oldmax, 1/gamma) * newmax;
+    double bi = pow(color.z / oldmax, 1/gamma) * newmax;
+    return ntos(round(ri)) + " " + ntos(round(gi)) + " " + ntos(round(bi));
+}
+
+std::string Renderer::ntos(int i){
+    std::ostringstream convert;
+    convert << i;
+    std::string out = convert.str();
+    return out;
 }
 
 Renderer::~Renderer()

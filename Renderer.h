@@ -13,6 +13,8 @@ public:
     void set_pixel(int x, int y, v3 color);
     v3 get_pixel(int x, int y);
     std::string to_ppm(v3 color);
+    std::string to_ppm(v3 color, double oldmax, double newmax);
+    std::string ntos(int i);
     void render_text();
     void render_ppm(const char *filename);
     int getWidth();

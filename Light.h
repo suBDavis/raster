@@ -10,7 +10,6 @@ public:
     Light(v3 point, v3 color);
     void transform(mat44 trans);
     ~Light(){}
-private:
     v3 color;
     v3 point;
 };

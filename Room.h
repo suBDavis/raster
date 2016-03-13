@@ -17,11 +17,11 @@ public:
     
     void addObject(RoomObject *obj);
     void addLight(Light l);
-    void draw(Renderer* r);
+    void draw(Renderer* r, int shader_mode);
 
 private:
     void transform(mat44 trans);
-    void rasterize(Renderer* r);
+    void rasterize(Renderer* r, int shader_mode);
     double compute_edge(v3 a, v3 b, v3 p);
     vector<RoomObject*> objs;
     vector<Light> lights;
