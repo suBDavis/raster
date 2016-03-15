@@ -176,19 +176,32 @@ void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
         for (std::vector<Light>::iterator li = lights->begin(); li != lights->end(); ++li){
             
             //I did a nasty thing by just picking a point at random.
-            v3 vector_to_light = li->point.minus(it->p1).Unit();
+            v3 vector_to_light = li->point.minus(it->p3).Unit();
             
+            
+            /*
+             * Flat Shading
+             */
+ 
             //Ambient Lighting
             v3 li_color = li->color;
             Ia = Ia.add(v3(phong.ka.x * li_color.x, 
                            phong.ka.y * li_color.y,
                            phong.ka.z * li_color.z));
+            
             //Diffuse Lighting
             double dot = norm.dot(vector_to_light);
             if (dot >= 0){
                 Id = Id.add(v3(phong.kd.x * dot * li_color.x,
                                 phong.kd.y * dot * li_color.y,
                                 phong.kd.z * dot * li_color.z));
+            //Specular Shading
+            
+            /*
+             * Gorard Shading
+             */
+
+ 
             } else {
                 Id = Id.add(v3(0,0,0));
             }

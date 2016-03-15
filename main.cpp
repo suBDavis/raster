@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 }
 
 int unit_tests(){
-    Light l1 = Light(v3(-4,4,4), v3(.2,.2,.2));    
+    Light l1 = Light(v3(-4,4,-3), v3(.2,.2,.2));    
     Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(1, 1, 1) , 1);
     mat t_mat = RoomObject::uniform_scale_transform(2);
 
@@ -38,7 +38,6 @@ int unit_tests(){
     
     //Mesh m4 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
     Mesh m4 = Mesh( v3(0,0,0) , p , Mesh::load_from_file("../objs/teapot.obj"));
-    //m3.transform(&t_mat);
     mat44 tiny_scale =RoomObject::uniform_scale_transform(.06); 
     m4.transform(&tiny_scale);
     translation_mat = RoomObject::translate_transform( v3(0,0,-9) );
@@ -47,8 +46,8 @@ int unit_tests(){
     
     Room room = Room(camera, -.1, .1, -.1, .1, -.1, -1000, v3(0,0,0));
     
-    //room.addObject(&m3);
-    room.addObject(&m4);
+    room.addObject(&m3);
+    //room.addObject(&m4);
     room.addLight(l1);
     
     Renderer renderer = Renderer(512, 512, 1);

@@ -58,7 +58,7 @@ void Room::draw(Renderer *r, int shader_mode){
             int miny = std::min({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             
-            v3 color = v3 (255, 255, 255);
+            //v3 color = v3 (255, 255, 255);
             
             //For now we can assume the triangle is within the box.
             for (int jy = miny; jy <= maxy; jy++)
@@ -104,7 +104,7 @@ void Room::rasterize(Renderer *r, int shader_mode)
      * Objects are already in world space.
      * 
      */ 
-    v3 camera = v3 (cam[8], cam[9], cam[10]);
+    v3 camera = v3 (cam[12], cam[13], cam[14]);
     for (int i = 0; i < this->objs.size(); i++){
         objs[i]->shade(shader_mode, &lights, &camera);
     }
@@ -175,6 +175,6 @@ void Room::transform(mat44 trans)
     for(unsigned int i = 0; i < objs.size(); i++)
         objs[i]->transform(&trans);
         
-    for(unsigned int i = 0; i < lights.size(); i++)
-        lights[i].transform(trans);
+//    for(unsigned int i = 0; i < lights.size(); i++)
+//        lights[i].transform(trans);
 }
