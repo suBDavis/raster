@@ -113,10 +113,10 @@ std::vector<Triangle> Mesh::load_from_file(const char* path){
             int ngon = shapes[i].mesh.num_vertices[n];
             for (size_t f = 0; f < ngon; f++) {
                 unsigned int v = shapes[i].mesh.indices[indexOffset + f];
-                printf("  face[%ld] v[%ld] = (%f, %f, %f)\n", n,
-                    shapes[i].mesh.positions[3*v+0],
-                    shapes[i].mesh.positions[3*v+1],
-                    shapes[i].mesh.positions[3*v+2]);
+//                printf("  face[%ld] v[%ld] = (%f, %f, %f)\n", n,
+//                    shapes[i].mesh.positions[3*v+0],
+//                    shapes[i].mesh.positions[3*v+1],
+//                    shapes[i].mesh.positions[3*v+2]);
                 
                 all_vertices.push_back( v3((double)shapes[i].mesh.positions[3*v+0], (double)shapes[i].mesh.positions[3*v+1], (double)shapes[i].mesh.positions[3*v+2]) );
 
@@ -133,7 +133,7 @@ std::vector<Triangle> Mesh::load_from_file(const char* path){
             all_vertices[v*3+1],
             all_vertices[v*3+2]
         };
-        printf( "%f, %f \n",triangle_vertices[0].x ,triangle_vertices[0].y);
+        //printf( "%f, %f \n",triangle_vertices[0].x ,triangle_vertices[0].y);
         Triangle t = Triangle( triangle_vertices );
         obj_mesh.push_back(t);
     }

@@ -14,6 +14,9 @@ cam(cam), left(left), right(right), bottom(bottom), top(top), n(n), f(f), bg(bg)
  * General Overview     | http://www.codinglabs.net/article_world_view_projection_matrix.aspx
  * More Triangle Raster | http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/lecture-notes/MIT6_837F12_Lec21.pdf
  * More Triangle Raster | https://www.cs.unc.edu/xcms/courses/comp770-s07/Lecture08.pdf
+ * Edge Function        | https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
+ * Barycentric coords   | https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/
+ * 
  */ 
 
 /* Takes a renderer and the shader mode (0 = none, 1 = flat, 2 = Gorard, 3 = Phong) */
