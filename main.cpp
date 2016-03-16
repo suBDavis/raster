@@ -23,8 +23,8 @@ int pa2();
 
 int main(int argc, char **argv)
 {
-    unit_tests();
-    //pa2();
+    //unit_tests();
+    pa2();
     return 0;
 }
 

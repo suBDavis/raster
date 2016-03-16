@@ -9,11 +9,30 @@ Triangle::Triangle( v3 triple[3] ){
     p3 = triple[2];
 }
 
+Triangle::Triangle(v3 triple[3], int p1i, int p2i, int p3i) : p1i(p1i), p2i(p2i), p3i(p3i){
+    p1 = triple[0];
+    p2 = triple[1];
+    p3 = triple[2];
+}
+
 v3 Triangle::get_ortho(){
     v3 a = p1.minus(p2);
     v3 b = p3.minus(p2);
     v3 cross = a.cross(b).Unit();
     return cross;
+}
+
+void Triangle::set_neighbors(std::vector<v3> neighbors[3]){
+    this->neighbors = neighbors;
+}
+
+v3 Triangle::point_norm(int dex){
+    v3 norm;
+    for (int i = 0; i < neighbors[dex].size(); i++){
+        norm = norm.add(neighbors[dex][i]);
+    }
+    norm = norm.Unit();
+    return norm;
 }
 
 v3 Triangle::get_point_above(v3 *point){}

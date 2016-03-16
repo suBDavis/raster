@@ -13,6 +13,7 @@ public:
     //Triangle(){}
     /* Constructor for triangles that are part of a mesh */
     Triangle( v3 triple[3] );
+    Triangle( v3 triple[3] , int p1i, int p2i, int p3i);
     ~Triangle(){}
     
     v3 get_ortho();
@@ -20,6 +21,8 @@ public:
     bool is_reflective();
     void transform(mat t_mat);
     std::string to_str();
+    void set_neighbors(std::vector<v3> neighbors[3]);
+    v3 point_norm(int dex);
     
     void project();
     
@@ -31,11 +34,13 @@ public:
                   { 0, 0, 0, 1 }};
         return t;
     }
-
     v3 p1;
     v3 p2;
     v3 p3;
-    
+    std::vector<v3> *neighbors;
+    int p1i;
+    int p2i;
+    int p3i;
     v3 flat_color;
 };
 

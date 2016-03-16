@@ -72,6 +72,8 @@ std::vector<Triangle> Mesh::generate_unit_sphere(int width, int height){
         gIndexBuffer[t++] = (height-3)*width + i;
     }
     
+    std::vector<v3> normals[gNumVertices];
+    
     std::vector<Triangle> mesh;
     
     for (int i = 0; i < gNumTriangles; i++){
@@ -80,9 +82,27 @@ std::vector<Triangle> Mesh::generate_unit_sphere(int width, int height){
         int k2 = gIndexBuffer[3*i + 2];
         
         v3 triangle_vertices[3] = { vertices[k0], vertices[k1], vertices[k2] };
-        Triangle t = Triangle( triangle_vertices );
+        Triangle t = Triangle( triangle_vertices , k0, k1, k2 );
+        
+        v3 norm = t.get_ortho();
+        normals[k0].push_back(norm);
+        normals[k1].push_back(norm);
+        normals[k2].push_back(norm);
         
         mesh.push_back(t);
+    }
+    
+    //iterate over the triangles again and tell it about its neighbors
+    for (int i = 0; i < gNumTriangles; i++){
+        int k0 = mesh[i].p1i;
+        int k1 = mesh[i].p2i;
+        int k2 = mesh[i].p3i;
+        
+        std::vector<v3> neighbors[3] = {normals[k0], normals[k1], normals[k2]};
+        mesh[i].set_neighbors(neighbors);
+        
+        v3 pn = mesh[i].point_norm(0);
+        
     }
     
     return mesh;
