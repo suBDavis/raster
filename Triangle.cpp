@@ -12,7 +12,8 @@ Triangle::Triangle( v3 triple[3] ){
 v3 Triangle::get_ortho(){
     v3 a = p1.minus(p2);
     v3 b = p3.minus(p2);
-    return b.cross(a).Unit();
+    v3 cross = a.cross(b).Unit();
+    return cross;
 }
 
 v3 Triangle::get_point_above(v3 *point){}

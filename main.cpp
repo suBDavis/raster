@@ -34,7 +34,7 @@ int unit_tests(){
     mat t_mat = RoomObject::uniform_scale_transform(2);
 
     mat44 camera = mat44 {{1,0,0,0},
-                          {0,-1,0,0},
+                          {0,1,0,0},
                           {0,0,1,0},
                           {0,0,0,1}};
     
@@ -48,7 +48,7 @@ int unit_tests(){
     Mesh m4 = Mesh( v3(0,0,0) , p , Mesh::load_from_file("../objs/teapot.obj"));
     mat44 tiny_scale =RoomObject::uniform_scale_transform(.06); 
     m4.transform(&tiny_scale);
-    translation_mat = RoomObject::translate_transform( v3(0,0,-7) );
+    translation_mat = RoomObject::translate_transform( v3(0,0,-9) );
     m4.transform(&translation_mat);
     
     
@@ -71,9 +71,10 @@ int pa2(){
     
     //Create a Room
     mat44 camera = mat44 {{1,0,0,0},
-                          {0,-1,0,0},
+                          {0,1,0,0},
                           {0,0,1,0},
                           {0,0,0,1}};
+    
     Room room = Room(camera, -.1, .1, -.1, .1, -.1, -1000, v3(0,0,0));
     
     //Create a light

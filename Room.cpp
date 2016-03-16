@@ -102,17 +102,6 @@ double Room::compute_edge(v3 b, v3 a, v3 p)
 /* shader mode (0 = none, 1 = flat, 2 = Gorard, 3 = Phong) */
 void Room::rasterize(Renderer *r, int shader_mode)
 {
-    /*
-     * Step 0 - shade the lil' triangles
-     * Objects are already in world space.
-     * 
-     */ 
-    v3 camera = v3 (cam[12], cam[13], cam[14]);
-    for (int i = 0; i < this->objs.size(); i++){
-        objs[i]->shade(shader_mode, &lights, &camera);
-    }
-    
-    
     if (objs.size() == 0 )
     {
         //verify that we have objects to render.
@@ -128,6 +117,17 @@ void Room::rasterize(Renderer *r, int shader_mode)
     
     mat44 camera_space_transform = inv(cam);
     this->transform(camera_space_transform);
+    
+    /*
+     * Step 1.5 - shade the lil' triangles
+     * Objects are already in world space.
+     * 
+     */ 
+     
+    v3 camera = v3 (cam[12], cam[13], cam[14]);
+    for (int i = 0; i < this->objs.size(); i++){
+        objs[i]->shade(shader_mode, &lights, &camera);
+    }
     
     /*
      * Setp 2 - Perspective Projection Transform
@@ -178,6 +178,6 @@ void Room::transform(mat44 trans)
     for(unsigned int i = 0; i < objs.size(); i++)
         objs[i]->transform(&trans);
         
-//    for(unsigned int i = 0; i < lights.size(); i++)
-//        lights[i].transform(trans);
+    for(unsigned int i = 0; i < lights.size(); i++)
+        lights[i].transform(trans);
 }
