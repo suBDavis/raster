@@ -8,6 +8,13 @@
 #include "Phong.h"
 #include "Room.h"
 
+/*
+ * To switch back to the regular (seeemingly correct) renderer, 
+ * make the depth vaues positive, 
+ * modify renderer iteration order somehow
+ * change camera to identity
+ * /
+
 using namespace arma;
 
 /* Method Declarations */
