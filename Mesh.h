@@ -37,6 +37,8 @@ public:
     int num_triangles();
     /* add triangles to the mesh */
     void add_triangle(Triangle t);
+    /* internal shading method to determine shade by normal */
+    v3 shade_by_norm(v3 norm, v3 vertex, v3 *camera, std::vector<Light> *lights);
     
 private:
     v3 center;

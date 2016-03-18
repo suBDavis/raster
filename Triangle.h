@@ -44,6 +44,9 @@ public:
     int p1i;
     int p2i;
     int p3i;
+    v3 c1;
+    v3 c2;
+    v3 c3;
     v3 flat_color;
 };
 

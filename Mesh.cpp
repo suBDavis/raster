@@ -186,78 +186,86 @@ std::vector<Triangle> Mesh::get_triangles(){ return triangles; }
 void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
     for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
         
-        v3 norm = it->get_ortho();
-        v3 p1n = it->point_norm(0);
-        v3 p2n = it->point_norm(1);
-        v3 p3n = it->point_norm(2);
-        //norm = p1n.add(p2n).add(p3n).Unit();
-        v3 I;
-        v3 Ia; //ambient
-        v3 Id; //diffuse
-        v3 Is; //specular
+        v3 flat_norm = it->get_ortho();
+        v3 flat_vertex = it->p1.add(it->p2).add(it->p3).Scale(.33333333333);
+        it->flat_color = shade_by_norm(flat_norm, flat_vertex, camera, lights);
         
-        //iterate over all the lights
-        for (std::vector<Light>::iterator li = lights->begin(); li != lights->end(); ++li){
+        v3 p1n = it->point_norm(0);
+        it->c1 = shade_by_norm(p1n, it->p1, camera, lights);
+        
+        v3 p2n = it->point_norm(1);
+        it->c2 = shade_by_norm(p2n, it->p2, camera, lights);
+        
+        v3 p3n = it->point_norm(2);
+        it->c3 = shade_by_norm(p3n, it->p3, camera, lights);
+    }
+}
+
+v3 Mesh::shade_by_norm(v3 norm, v3 vertex, v3 *camera, std::vector<Light> *lights){
+
+    v3 I;
+    v3 Ia; //ambient
+    v3 Id; //diffuse
+    v3 Is; //specular
+    v3 vert = vertex;
+    
+    //iterate over all the lights
+    for (std::vector<Light>::iterator li = lights->begin(); li != lights->end(); ++li){
+
+        v3 vector_to_light = li->point.minus(vert).Unit();
+        v3 to_eye = vert.Scale(-1).Unit();
+        v3 reflect = norm.Unit().Scale(2 * (norm.Unit().dot(vector_to_light))).minus(vector_to_light).Unit();
+        
+        /*
+         * Flat Shading
+         */
+
+        //Ambient Lighting
+        v3 li_color = li->color;
+        
+        Ia = Ia.add(v3(phong.ka.x * li_color.x, 
+                       phong.ka.y * li_color.y,
+                       phong.ka.z * li_color.z));
+        
+        //Diffuse Lighting
+        double dot = norm.dot(vector_to_light);
+        
+        if (dot >= 0){
+            Id = Id.add(v3(phong.kd.x * dot * li_color.x,
+                            phong.kd.y * dot * li_color.y,
+                            phong.kd.z * dot * li_color.z));
             
-            v3 vert = it->p3.add(it->p2).add(it->p1);
+            //Specular Shading
+            v3 reflect_dir = vector_to_light.Scale(-1).reflect(norm);
+            double spec_angle = std::max(reflect_dir.dot( to_eye ) ,  0.0);
+            double specular = std::pow(spec_angle, phong.spower);
             
-            vert = vert.Scale( .333333 );
-            
-            //I did a nasty thing by just picking a point at random.
-            v3 vector_to_light = li->point.minus(vert).Unit();
-            v3 to_eye = vert.Scale(-1).Unit();
-            v3 reflect = norm.Unit().Scale(2 * (norm.Unit().dot(vector_to_light))).minus(vector_to_light).Unit();
-            
+            double sr = phong.ks.x * specular * li_color.x;
+            double sg = phong.ks.y * specular * li_color.y;
+            double sb = phong.ks.z * specular * li_color.z;
             /*
-             * Flat Shading
+             * Specular Lighting
              */
- 
-            //Ambient Lighting
-            v3 li_color = li->color;
-            Ia = Ia.add(v3(phong.ka.x * li_color.x, 
-                           phong.ka.y * li_color.y,
-                           phong.ka.z * li_color.z));
-            
-            //Diffuse Lighting
-            double dot = norm.dot(vector_to_light);
-            
-            if (dot >= 0){
-                Id = Id.add(v3(phong.kd.x * dot * li_color.x,
-                                phong.kd.y * dot * li_color.y,
-                                phong.kd.z * dot * li_color.z));
-                
-                //Specular Shading
-                v3 reflect_dir = vector_to_light.Scale(-1).reflect(norm);
-                double spec_angle = std::max(reflect_dir.dot( to_eye ) ,  0.0);
-                double specular = std::pow(spec_angle, phong.spower);
-                
-                double sr = phong.ks.x * specular * li_color.x;
-                double sg = phong.ks.y * specular * li_color.y;
-                double sb = phong.ks.z * specular * li_color.z;
-                /*
-                 * Specular Lighting
-                 */
 //                double sr = phong.ks.x * pow( (reflect.dot(to_eye)), phong.spower) * li_color.x;
 //                double sg = phong.ks.y * pow( (reflect.dot(to_eye)), phong.spower) * li_color.y;
 //                double sb = phong.ks.z * pow( (reflect.dot(to_eye)), phong.spower) * li_color.z;
-                Is = Is.add(v3(sr, sg, sb));
-                
-            } else {
-                Id = Id.add(v3(0,0,0));
-            }
-        
+            Is = Is.add(v3(sr, sg, sb));
             
-            /*
-             * Gorard Shading
-             */
-            
-            I = Ia.add(Id).add(Is);
-            
+        } else {
+            Id = Id.add(v3(0,0,0));
         }
+    
         
-        //set the flat color of the triangle.
-        it->flat_color = I;
+        /*
+         * Gorard Shading
+         */
+        
+        I = Ia.add(Id).add(Is);
+        
     }
+    
+    //set the flat color of the triangle.
+    return I;
 }
 
 /* returns a string with all the triangles */
