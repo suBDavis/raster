@@ -199,11 +199,13 @@ void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
         //iterate over all the lights
         for (std::vector<Light>::iterator li = lights->begin(); li != lights->end(); ++li){
             
-            v3 vert = it->p3;
+            v3 vert = it->p3.add(it->p2).add(it->p1);
+            
+            vert = vert.Scale( .333333 );
             
             //I did a nasty thing by just picking a point at random.
             v3 vector_to_light = li->point.minus(vert).Unit();
-            v3 to_eye = vert.Scale(-1);
+            v3 to_eye = vert.Scale(-1).Unit();
             v3 reflect = norm.Unit().Scale(2 * (norm.Unit().dot(vector_to_light))).minus(vector_to_light).Unit();
             
             /*
@@ -224,21 +226,21 @@ void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
                                 phong.kd.y * dot * li_color.y,
                                 phong.kd.z * dot * li_color.z));
                 
-//                //Specular Shading
-//                v3 reflect_dir = vector_to_light.Scale(-1).reflect(norm);
-//                double spec_angle = std::max(reflect_dir.dot( vert.Scale(-1) ) ,  0.0);
-//                double specular = std::pow(spec_angle, phong.spower);
-//                
-//                double sr = phong.ks.x * specular * li_color.x;
-//                double sg = phong.ks.y * specular * li_color.y;
-//                double sb = phong.ks.z * specular * li_color.z;
+                //Specular Shading
+                v3 reflect_dir = vector_to_light.Scale(-1).reflect(norm);
+                double spec_angle = std::max(reflect_dir.dot( to_eye ) ,  0.0);
+                double specular = std::pow(spec_angle, phong.spower);
+                
+                double sr = phong.ks.x * specular * li_color.x;
+                double sg = phong.ks.y * specular * li_color.y;
+                double sb = phong.ks.z * specular * li_color.z;
                 /*
                  * Specular Lighting
                  */
-                double sr = phong.ks.x * pow( (reflect.dot(to_eye)), phong.spower) * li_color.x;
-                double sg = phong.ks.y * pow( (reflect.dot(to_eye)), phong.spower) * li_color.y;
-                double sb = phong.ks.z * pow( (reflect.dot(to_eye)), phong.spower) * li_color.z;
-                //Is = Is.add(v3(sr, sg, sb));
+//                double sr = phong.ks.x * pow( (reflect.dot(to_eye)), phong.spower) * li_color.x;
+//                double sg = phong.ks.y * pow( (reflect.dot(to_eye)), phong.spower) * li_color.y;
+//                double sb = phong.ks.z * pow( (reflect.dot(to_eye)), phong.spower) * li_color.z;
+                Is = Is.add(v3(sr, sg, sb));
                 
             } else {
                 Id = Id.add(v3(0,0,0));

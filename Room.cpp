@@ -36,7 +36,7 @@ void Room::draw(Renderer *r, int shader_mode){
     //set the depth buffer
     const int numrows = r->getHeight();
     const int numcols = r->getWidth();
-    double *depth = new double [numrows * numcols];
+    double depth[numrows * numcols];
     
     for (unsigned int col = 0; col < numcols; col++)
         for (unsigned int row = 0; row < numrows; row++)
@@ -70,9 +70,9 @@ void Room::draw(Renderer *r, int shader_mode){
                 {
                     //for every pixel in the bounding box
                     v3 p = v3(ix, jy, 0);
-                    double e1 = compute_edge( t.p1, t.p2, p);
-                    double e2 = compute_edge( t.p2, t.p3, p);
-                    double e3 = compute_edge( t.p3, t.p1, p);
+                    double e1 = compute_edge( t.p2, t.p1, p);
+                    double e2 = compute_edge( t.p3, t.p2, p);
+                    double e3 = compute_edge( t.p1, t.p3, p);
                     
                     int dex = jy * numcols + ix;
                     

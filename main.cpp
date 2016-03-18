@@ -23,15 +23,15 @@ int pa2();
 
 int main(int argc, char **argv)
 {
-    //unit_tests();
+    unit_tests();
     pa2();
     return 0;
 }
 
 int unit_tests(){
     Light l1 = Light(v3(-4,4,-3), v3(.2,.2,.2));    
-    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(1, 1, 1) , 1);
-    mat t_mat = RoomObject::uniform_scale_transform(2);
+    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5, .5, .5) , 32);
+//    mat t_mat = RoomObject::uniform_scale_transform(2);
 
     mat44 camera = mat44 {{1,0,0,0},
                           {0,1,0,0},
@@ -39,16 +39,16 @@ int unit_tests(){
                           {0,0,0,1}};
     
     //Create a room maybe?
-    Mesh m3 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
-    m3.transform(&t_mat);
-    mat44 translation_mat = RoomObject::translate_transform( v3(0,0,-7) );
-    m3.transform(&translation_mat);
+//    Mesh m3 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
+//    m3.transform(&t_mat);
+//    mat44 translation_mat = RoomObject::translate_transform( v3(0,0,-7) );
+//    m3.transform(&translation_mat);
     
     //Mesh m4 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
     Mesh m4 = Mesh( v3(0,0,0) , p , Mesh::load_from_file("../objs/teapot.obj"));
     mat44 tiny_scale =RoomObject::uniform_scale_transform(.06); 
     m4.transform(&tiny_scale);
-    translation_mat = RoomObject::translate_transform( v3(0,0,-9) );
+    mat44 translation_mat = RoomObject::translate_transform( v3(0,0,-9) );
     m4.transform(&translation_mat);
     
     
@@ -62,7 +62,7 @@ int unit_tests(){
     
     room.draw(&renderer, 0);
     
-    renderer.render_ppm("../Images/out.ppm");
+    renderer.render_ppm("../Images/tpt.ppm");
     
     return 0;
 }
@@ -71,7 +71,7 @@ int pa2(){
     
     //Create a Room
     mat44 camera = mat44 {{1,0,0,0},
-                          {0,-1,0,0},
+                          {0,1,0,0},
                           {0,0,1,0},
                           {0,0,0,1}};
     
@@ -81,7 +81,7 @@ int pa2(){
     Light l1 = Light(v3(-4,4,-3), v3(1,1,1));
 
     //Create a Sphere Mesh
-    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5,.5,.5) , 2);
+    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5,.5,.5) , 32);
     Mesh m3 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
     
     //Put the Sphere mesh in world Space

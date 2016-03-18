@@ -23,7 +23,7 @@ v3::v3(double xi, double yi, double zi, double ci){
 }
 
 v3 v3::Scale (double scalar){
-    v3 v (x * scalar,y * scalar,z * scalar);
+    v3 v (x * scalar,y * scalar,z * scalar, c);
     return v;
 }
 v3 v3::Unit(){
@@ -32,19 +32,22 @@ v3 v3::Unit(){
 }
 
 double v3::Magnitude(){
+    if (x == 0 && y == 0 && z == 0){
+        return 1;
+    }
     return sqrt( x*x + y*y + z*z);
 }
 
 v3 v3::add_const(double c){
-    v3 v (x+c, y+c, z+c);
+    v3 v (x+c, y+c, z+c, c);
     return v;
 }
 v3 v3::add(v3 b){
-    v3 v (x+b.x, y+b.y, z+b.z);
+    v3 v (x+b.x, y+b.y, z+b.z, c);
     return v;
 }
 v3 v3::multiply(v3 b){
-    v3 v (x*b.x, y*b.y, z*b.z);
+    v3 v (x*b.x, y*b.y, z*b.z, c);
     return v;
 }
 
@@ -56,11 +59,11 @@ v3 v3::cross(v3 b){
     double i = y * b.z -  z * b.y;
     double j = z * b.x - x * b.z;
     double k = x * b.y - y * b.x;
-    return v3(i,j,k);
+    return v3(i,j,k,c);
 }
 
 v3 v3::minus(v3 b){
-    v3 v (x - b.x, y - b.y, z - b.z);
+    v3 v (x - b.x, y - b.y, z - b.z, c);
     return v;
 }
 

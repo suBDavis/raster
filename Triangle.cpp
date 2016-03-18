@@ -18,7 +18,7 @@ Triangle::Triangle(v3 triple[3], int p1i, int p2i, int p3i) : p1i(p1i), p2i(p2i)
 v3 Triangle::get_ortho(){
     v3 a = p1.minus(p2);
     v3 b = p3.minus(p2);
-    v3 cross = a.cross(b).Unit();
+    v3 cross = b.cross(a).Unit();
     return cross;
 }
 
