@@ -23,16 +23,29 @@ v3 Triangle::get_ortho(){
 }
 
 void Triangle::set_neighbors(std::vector<v3> neighbors[3]){
-    this->neighbors = neighbors;
+    n1 = neighbors[0];
+    n2 = neighbors[1];
+    n3 = neighbors[2];
 }
 
 v3 Triangle::point_norm(int dex){
     v3 norm;
-    for (int i = 0; i < neighbors[dex].size(); i++){
-        norm = norm.add(neighbors[dex][i]);
+    
+    if (dex == 0){
+        for (int i = 0; i < n1.size(); i++){
+            norm = norm.add(n1[i]);
+        }
+    } else if (dex == 1){
+        for (int i = 0; i < n2.size(); i++){
+            norm = norm.add(n2[i]);
+        }
+    } else {
+        for (int i = 0; i < n3.size(); i++){
+            norm = norm.add(n3[i]);
+        }
     }
     norm = norm.Unit();
-    return norm;
+    return norm;   
 }
 
 v3 Triangle::get_point_above(v3 *point){}
@@ -47,6 +60,14 @@ void Triangle::transform(mat t_mat)
         p2 = p2.transform_4(t_mat);
         p3 = p3.transform_4(t_mat);
         
+        //we must also transform all the normals :)
+        for (int i = 0; i< n1.size();i++)
+            n1[i].transform_4(t_mat);
+        for (int i = 0; i< n2.size();i++)
+            n2[i].transform_4(t_mat);
+        for (int i = 0; i< n3.size();i++)
+            n3[i].transform_4(t_mat);
+
     } else {
         //this is something else
         throw std::invalid_argument( "Received Matrix of Wrong Size" );

@@ -71,7 +71,7 @@ int pa2(){
     
     //Create a Room
     mat44 camera = mat44 {{1,0,0,0},
-                          {0,1,0,0},
+                          {0,-1,0,0},
                           {0,0,1,0},
                           {0,0,0,1}};
     
@@ -81,7 +81,7 @@ int pa2(){
     Light l1 = Light(v3(-4,4,-3), v3(1,1,1));
 
     //Create a Sphere Mesh
-    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5,.5,.5) , 32);
+    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5,.5,.5) , 2);
     Mesh m3 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
     
     //Put the Sphere mesh in world Space

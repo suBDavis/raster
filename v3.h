@@ -24,6 +24,7 @@ public:
     v3 add_const(double c);
     v3 add(v3 b);
     v3 multiply(v3 b);
+    v3 reflect(v3 norm);
     v3 cross(v3 b);
     double Magnitude();
     std::string to_str();

@@ -64,6 +64,12 @@ v3 v3::minus(v3 b){
     return v;
 }
 
+v3 v3::reflect(v3 norm){
+    norm = norm.Unit();
+    v3 vv = norm.Scale(this->dot(norm) * 2 );
+    return this->minus(vv);
+}
+
 std::string v3::to_str(){
     std::ostringstream strs;
     strs << "< " << x << " " << y << " " << z << " >";

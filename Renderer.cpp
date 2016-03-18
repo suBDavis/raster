@@ -46,8 +46,8 @@ void Renderer::render_ppm(const char *filename){
     myfile << height;
     myfile << "\n255\n";
     //must render in reverse order because 0,0 is in the bottom right corner, not top left.
-    //for (int j=0; j<height; j++){
-    for (int j = (height - 1) ; j >= 0; j--){
+    for (int j=0; j<height; j++){
+    //for (int j = (height - 1) ; j >= 0; j--){
         for(int i=0; i<width; i++){
             v3 pcolor = get_pixel(i, j);
 

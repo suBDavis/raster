@@ -38,6 +38,9 @@ public:
     v3 p2;
     v3 p3;
     std::vector<v3> *neighbors;
+    std::vector<v3> n1;
+    std::vector<v3> n2;
+    std::vector<v3> n3;
     int p1i;
     int p2i;
     int p3i;
