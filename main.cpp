@@ -60,7 +60,7 @@ int unit_tests(){
     
     Renderer renderer = Renderer(512, 512, 1);
     
-    room.draw(&renderer, 0);
+    room.draw(&renderer, 1);
     
     renderer.render_ppm("../Images/tpt.ppm");
     
@@ -99,7 +99,7 @@ int pa2(){
     Renderer renderer = Renderer(512, 512, 1);
     
     //Draw the room to the renderer
-    room.draw(&renderer, 0);
+    room.draw(&renderer, 1);
     
     //Output the image
     renderer.render_ppm("../Images/out.ppm");

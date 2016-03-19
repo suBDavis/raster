@@ -186,22 +186,24 @@ std::vector<Triangle> Mesh::get_triangles(){ return triangles; }
 void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
     for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
         
+        Triangle tri = *it;
+        
         v3 flat_norm = it->get_ortho();
         v3 flat_vertex = it->p1.add(it->p2).add(it->p3).Scale(.33333333333);
-        it->flat_color = shade_by_norm(flat_norm, flat_vertex, camera, lights);
+        it->flat_color = shade_by_norm(flat_norm, flat_vertex, tri, camera, lights);
         
         v3 p1n = it->point_norm(0);
-        it->c1 = shade_by_norm(p1n, it->p1, camera, lights);
+        it->c1 = shade_by_norm(p1n, it->p1, tri, camera, lights);
         
         v3 p2n = it->point_norm(1);
-        it->c2 = shade_by_norm(p2n, it->p2, camera, lights);
+        it->c2 = shade_by_norm(p2n, it->p2, tri, camera, lights);
         
         v3 p3n = it->point_norm(2);
-        it->c3 = shade_by_norm(p3n, it->p3, camera, lights);
+        it->c3 = shade_by_norm(p3n, it->p3, tri, camera, lights);
     }
 }
 
-v3 Mesh::shade_by_norm(v3 norm, v3 vertex, v3 *camera, std::vector<Light> *lights){
+v3 Mesh::shade_by_norm(v3 norm, v3 vertex, Triangle tri,  v3 *camera, std::vector<Light> *lights){
 
     v3 I;
     v3 Ia; //ambient
@@ -277,6 +279,30 @@ std::string Mesh::to_str(){
     return ss.str();
 }
 
+v3 Mesh::interpolate(v3 p, Triangle t){
+    v3 v0 = t.p2;
+    v3 v1 = t.p1;
+    double f10 = (v0.y - v1.y)*p.x + (v1.x - v0.x) * p.y + (v0.x * v1.y - v0.y * v1.x);
+    
+    v1 = t.p3;
+    v3 v2 = t.p2;
+    double f21 = (v1.y - v2.y)*p.x + (v2.x - v1.x) * p.y + (v1.x * v2.y - v1.y * v2.x);
+    
+    v0 = t.p3;
+    v2 = t.p1;
+    double f02 = (v2.y - v0.y)*p.x + (v0.x - v2.x) * p.y + (v2.x * v0.y - v2.y * v0.x);
+    
+    
+    double cons = f10 + f21 + f02;
+    
+    double lambda0 = f21 / cons;
+    double lambda1 = f02 / cons;
+    double lambda2 = f10 / cons;
+    
+    double one =  lambda0 + lambda1 + lambda2;
+    
+    return v3(lambda0, lambda1, lambda2);
+}
 /* Iterate over the triangles in the mesh and transform them */
 void Mesh::transform(mat *t_mat){
     for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {

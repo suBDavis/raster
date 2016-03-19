@@ -1,4 +1,5 @@
 #include "Room.h"
+#include "Mesh.h"
 #include <stdexcept>
 #include <stdio.h>
 #include <cstdlib>
@@ -54,14 +55,18 @@ void Room::draw(Renderer *r, int shader_mode){
             
             //Tell the triangles to project themselves into the view plane
             t.project();
+            
+            v3 color1 = v3 (0, 0, 1);
+            v3 color2 = v3 (1, 0, 0);
+//            r->set_pixel((int)round(t.p1.x)-2, (int)round(t.p1.y)+2, color1);
+//            r->set_pixel((int)round(t.p2.x)+1, (int)round(t.p2.y)+1, color2);
+//            r->set_pixel((int)round(t.p3.x)-1, (int)round(t.p3.y)-1, v3(0, 1, 0));
              
             //draw the triangle to the renderer
             int minx = std::min({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
             int maxx = std::max({(int)t.p1.x, (int)t.p2.x, (int)t.p3.x});
             int miny = std::min({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
-            
-            //v3 color = v3 (255, 255, 255);
             
             //For now we can assume the triangle is within the box.
             for (int jy = miny; jy <= maxy; jy++)
@@ -81,7 +86,15 @@ void Room::draw(Renderer *r, int shader_mode){
                         if ( std::abs(t.p1.z) <= depth[dex] )
                         {
                             depth[dex] = std::abs(t.p1.z);
-                            r->set_pixel(ix, jy, t.flat_color);
+                            if (shader_mode == 0){
+                                r->set_pixel(ix, jy, t.flat_color);
+                            } else if (shader_mode == 1){
+                                v3 interp = Mesh::interpolate(p, t);
+                                v3 a = t.c1.Scale(interp.x);
+                                v3 b = t.c2.Scale(interp.y);
+                                v3 c = t.c3.Scale(interp.z);
+                                r->set_pixel(ix, jy, a.add(b).add(c));
+                            }
                         }
                     } 
                     else 
