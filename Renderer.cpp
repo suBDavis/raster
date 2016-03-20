@@ -78,7 +78,7 @@ std::string Renderer::to_ppm(v3 color){
 }
 
 std::string Renderer::to_ppm(v3 color, double oldmax, double newmax){
-    double gamma = 1.0;
+    double gamma = 2.2;
     //step 1: normalize to between 0 and 1
     double ri = pow(color.x / oldmax, 1/gamma) * newmax;
     double gi = pow(color.y / oldmax, 1/gamma) * newmax;

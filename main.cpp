@@ -81,7 +81,7 @@ int pa2(){
     Light l1 = Light(v3(-4,4,-3), v3(1,1,1));
 
     //Create a Sphere Mesh
-    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5,.5,.5) , 6);
+    Phong p = Phong( v3(0,.2, 0), v3(0, .5, 0), v3(.5,.5,.5) , 32);
     Mesh m3 = Mesh( v3(0,0,0) , p, Mesh::generate_unit_sphere(32, 16));
     
     //Put the Sphere mesh in world Space
@@ -96,13 +96,22 @@ int pa2(){
     room.addLight(l1);
     
     //Create a renderer
-    Renderer renderer = Renderer(512, 512, 1);
-    
-    //Draw the room to the renderer
+    Renderer renderer = Renderer(512, 512, 2.2);
+
+    //Draw the room to a renderer without lighting
+    room.draw(&renderer, 0);
+    //output
+    renderer.render_ppm("../Images/none.ppm");
+
+    //draw to renderer flat
     room.draw(&renderer, 1);
-    
     //Output the image
-    renderer.render_ppm("../Images/out.ppm");
+    renderer.render_ppm("../Images/flat.ppm");
     
+    //Draw the room to the renderer g
+    room.draw(&renderer, 2);
+    //Output the image
+    renderer.render_ppm("../Images/gouraud.ppm"); 
+
     return 0;
 }
