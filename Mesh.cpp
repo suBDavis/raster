@@ -116,7 +116,7 @@ std::vector<Triangle> Mesh::load_from_file(const char* path){
     std::vector<v3> all_vertices;
 
     std::string err;
-    bool ret = tinyobj::LoadObj(shapes, materials, err, inputfile.c_str());
+    //bool ret = tinyobj::LoadObj(shapes, materials, err, inputfile.c_str());
 
     if (!err.empty()) { // `err` may contain warning message.
       std::cerr << err << std::endl;
@@ -299,7 +299,7 @@ v3 Mesh::interpolate(v3 p, Triangle t){
     double lambda1 = f02 / cons;
     double lambda2 = f10 / cons;
     
-    double one =  lambda0 + lambda1 + lambda2;
+    //double one =  lambda0 + lambda1 + lambda2;
     
     return v3(lambda0, lambda1, lambda2);
 }

@@ -44,8 +44,8 @@ public:
     
 private:
     v3 center;
-    std::vector<Triangle> triangles;
     Phong phong;
+    std::vector<Triangle> triangles;
 };
 
 #endif // MESH_H

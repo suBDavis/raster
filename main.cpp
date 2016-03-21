@@ -13,7 +13,7 @@
  * make the depth vaues positive, 
  * modify renderer iteration order somehow
  * change camera to identity
- * /
+ */
 
 using namespace arma;
 

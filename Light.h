@@ -10,8 +10,8 @@ public:
     Light(v3 point, v3 color);
     void transform(mat44 trans);
     ~Light(){}
-    v3 color;
     v3 point;
+    v3 color;
 };
 
 #endif // LIGHT_H

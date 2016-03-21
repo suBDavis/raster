@@ -32,15 +32,15 @@ v3 Triangle::point_norm(int dex){
     v3 norm;
     
     if (dex == 0){
-        for (int i = 0; i < n1.size(); i++){
+        for (unsigned int i = 0; i < n1.size(); i++){
             norm = norm.add(n1[i]);
         }
     } else if (dex == 1){
-        for (int i = 0; i < n2.size(); i++){
+        for (unsigned int i = 0; i < n2.size(); i++){
             norm = norm.add(n2[i]);
         }
     } else {
-        for (int i = 0; i < n3.size(); i++){
+        for (unsigned int i = 0; i < n3.size(); i++){
             norm = norm.add(n3[i]);
         }
     }

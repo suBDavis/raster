@@ -26,14 +26,14 @@ private:
     vector<RoomObject*> objs;
     vector<Light> lights;
     
-    v3 bg;
+    mat44 cam;
     double left;
     double right;
     double bottom;
     double top;
     double n;
     double f;
-    mat44 cam;
+    v3 bg;
     double step_x;
     double step_y;
 };

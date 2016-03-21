@@ -10,8 +10,8 @@ public:
     ~Phong(){}
 
     v3 ka;
-    v3 ks;
     v3 kd;
+    v3 ks;
     double spower;
 };
 
