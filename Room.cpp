@@ -97,6 +97,9 @@ void Room::draw(Renderer *r, int shader_mode){
                                 v3 b = t.c2.Scale(interp.y);
                                 v3 c = t.c3.Scale(interp.z);
                                 r->set_pixel(ix, jy, a.add(b).add(c));
+                            } else if (shader_mode == 3){
+                                v3 interp = Mesh::interpolate(p, t);
+                                v3 norm; //get the interpolated normal.
                             }
                         }
                     } 

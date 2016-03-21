@@ -237,33 +237,37 @@ v3 Mesh::shade_by_norm(v3 norm, v3 vertex, Triangle tri,  v3 *camera, std::vecto
                             phong.kd.y * dot * li_color.y,
                             phong.kd.z * dot * li_color.z));
             
-            //Specular Shading
+            /*
+             * Specular Shading
+             * Only do this if we also did diffues
+             */
+            
             v3 reflect_dir = vector_to_light.Scale(-1).reflect(norm);
-            double spec_angle = std::max(reflect_dir.dot( to_eye ) ,  0.0);
+            v3 half_angle = to_eye.add(vector_to_light).Unit();
+            //double spec_angle = std::max(reflect_dir.dot( to_eye ) ,  0.0);
+            double spec_angle = std::max(norm.dot(half_angle), 0.0);
             double specular = std::pow(spec_angle, phong.spower);
+            
             
             double sr = phong.ks.x * specular * li_color.x;
             double sg = phong.ks.y * specular * li_color.y;
             double sb = phong.ks.z * specular * li_color.z;
+             
             /*
-             * Specular Lighting
+             * Specular Lighting alternative form.
+             *
+            double sr = phong.ks.x * pow( (reflect.dot(to_eye)), phong.spower) * li_color.x;
+            double sg = phong.ks.y * pow( (reflect.dot(to_eye)), phong.spower) * li_color.y;
+            double sb = phong.ks.z * pow( (reflect.dot(to_eye)), phong.spower) * li_color.z;
              */
-//                double sr = phong.ks.x * pow( (reflect.dot(to_eye)), phong.spower) * li_color.x;
-//                double sg = phong.ks.y * pow( (reflect.dot(to_eye)), phong.spower) * li_color.y;
-//                double sb = phong.ks.z * pow( (reflect.dot(to_eye)), phong.spower) * li_color.z;
             Is = Is.add(v3(sr, sg, sb));
             
-        } else {
+        } 
+        else 
+        {
             Id = Id.add(v3(0,0,0));
-        }
-    
-        
-        /*
-         * Gorard Shading
-         */
-        
-        I = Ia.add(Id).add(Is);
-        
+        } 
+        I = I.add(Ia).add(Id).add(Is);
     }
     
     //set the flat color of the triangle.
