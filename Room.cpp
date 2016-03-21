@@ -53,6 +53,8 @@ void Room::draw(Renderer *r, int shader_mode){
             //for every triangle in the object
             Triangle t = triangles[tr];
             
+            t.project();
+            
             v3 color1 = v3 (0, 0, 1);
             v3 color2 = v3 (1, 0, 0);
             v3 white = v3(1, 1, 1);
@@ -170,17 +172,6 @@ void Room::rasterize(Renderer *r, int shader_mode)
     {0,    0,    0,  1        }
     };
     this->transform(viewport);
-
-    /*
-     * Step 4 - project triangles into the viewplane
-     */
-    for (unsigned int i = 0; i < objs.size(); i++){
-        std::vector<Triangle> triangles = objs[i]->get_triangles();
-        for (unsigned int tr = 0; tr < triangles.size(); tr++){
-            Triangle t = triangles[tr];
-            t.project();
-        }
-    }
 
 }
 
