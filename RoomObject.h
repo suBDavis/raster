@@ -24,36 +24,6 @@ public:
     virtual std::string to_str() = 0;
     virtual std::vector<Triangle> get_triangles() = 0;
     virtual void shade(int shader_mode, std::vector<Light> *lights, v3 *camera) = 0;
-    
-    /* Static Methods */
-    static mat44 uniform_scale_transform(double k){
-        /* takes a scalar k and returns a 4x4 homogeneous matrix */
-        mat44 t= {{ k, 0, 0, 0 },
-                  { 0, k, 0, 0 },
-                  { 0, 0, k, 0 },
-                  { 0, 0, 0, 1 }};
-        return t;
-    }
-    
-    static mat44 nonuniform_scale_transform(double x, double y, double z){
-        /* takes a scalar k and returns a 4x4 homogeneous matrix */
-        mat44 t= {{ x, 0, 0, 0 },
-                  { 0, y, 0, 0 },
-                  { 0, 0, z, 0 },
-                  { 0, 0, 0, 1 }};
-        return t;
-    }
-    static mat44 translate_transform(v3 new_point){
-        /* Takes a vector and makes a matrix to translate it there */
-        double x = new_point.x;
-        double y = new_point.y;
-        double z = new_point.z;
-        mat44 t= {{1,0,0,x},
-                  {0,1,0,y},
-                  {0,0,1,z},
-                  {0,0,0,1}};
-        return t;
-    }
 };
 
 #endif // ROOMOBJECT_H

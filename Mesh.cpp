@@ -190,20 +190,20 @@ void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
         
         v3 flat_norm = it->get_ortho();
         v3 flat_vertex = it->p1.add(it->p2).add(it->p3).Scale(.33333333333);
-        it->flat_color = shade_by_norm(flat_norm, flat_vertex, tri, camera, lights);
+        it->flat_color = shade_by_norm(flat_norm, flat_vertex, camera, lights);
         
         v3 p1n = it->point_norm(0);
-        it->c1 = shade_by_norm(p1n, it->p1, tri, camera, lights);
+        it->c1 = shade_by_norm(p1n, it->p1, camera, lights);
         
         v3 p2n = it->point_norm(1);
-        it->c2 = shade_by_norm(p2n, it->p2, tri, camera, lights);
+        it->c2 = shade_by_norm(p2n, it->p2, camera, lights);
         
         v3 p3n = it->point_norm(2);
-        it->c3 = shade_by_norm(p3n, it->p3, tri, camera, lights);
+        it->c3 = shade_by_norm(p3n, it->p3, camera, lights);
     }
 }
 
-v3 Mesh::shade_by_norm(v3 norm, v3 vertex, Triangle tri,  v3 *camera, std::vector<Light> *lights){
+v3 Mesh::shade_by_norm(v3 norm, v3 vertex,v3 *camera, std::vector<Light> *lights){
 
     v3 I;
     v3 Ia; //ambient

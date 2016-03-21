@@ -1,7 +1,7 @@
 #ifndef ROOM_H
 #define ROOM_H
 #include "v3.h"
-#include "RoomObject.h"
+#include "Mesh.h"
 #include "Renderer.h"
 #include "Light.h"
 #include "Ray.h"
@@ -15,7 +15,7 @@ public:
     Room(mat44 cam, double left, double right, double bottom, double top, double near, double far, v3 bg);
     ~Room(){}
     
-    void addObject(RoomObject *obj);
+    void addObject(Mesh *obj);
     void addLight(Light l);
     void draw(Renderer* r, int shader_mode);
 
@@ -23,7 +23,7 @@ private:
     void transform(mat44 trans);
     void rasterize(Renderer* r, int shader_mode);
     double compute_edge(v3 a, v3 b, v3 p);
-    vector<RoomObject*> objs;
+    vector<Mesh*> objs;
     vector<Light> lights;
     
     mat44 cam;

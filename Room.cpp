@@ -98,8 +98,18 @@ void Room::draw(Renderer *r, int shader_mode){
                                 v3 c = t.c3.Scale(interp.z);
                                 r->set_pixel(ix, jy, a.add(b).add(c));
                             } else if (shader_mode == 3){
+                                //v3 Mesh::shade_by_norm(v3 norm, v3 vertex, v3 *camera, std::vector<Light> *lights){
+                                v3 mesh_center = v3(0,0,-5);
+                                v3 camera = v3 (cam[12], cam[13], cam[14]);
+                                
                                 v3 interp = Mesh::interpolate(p, t);
-                                v3 norm; //get the interpolated normal.
+                                v3 a = t.point_norm(0).Scale(interp.x);
+                                v3 b = t.point_norm(1).Scale(interp.y);
+                                v3 c = t.point_norm(2).Scale(interp.z);
+                                v3 norm = a.add(b).add(c); //should be unit
+                                
+                                v3 shade = objs[i]->shade_by_norm(norm, mesh_center, &camera, &lights);
+                                r->set_pixel(ix, jy, shade);
                             }
                         }
                     } 
@@ -178,7 +188,7 @@ void Room::rasterize(Renderer *r, int shader_mode)
 
 }
 
-void Room::addObject(RoomObject* obj)
+void Room::addObject(Mesh* obj)
 {
     objs.push_back(obj);
 }
@@ -197,6 +207,6 @@ void Room::transform(mat44 trans)
     for(unsigned int i = 0; i < objs.size(); i++)
         objs[i]->transform(&trans);
         
-    for(unsigned int i = 0; i < lights.size(); i++)
-        lights[i].transform(trans);
+//    for(unsigned int i = 0; i < lights.size(); i++)
+//        lights[i].transform(trans);
 }
