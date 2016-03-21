@@ -53,11 +53,9 @@ void Room::draw(Renderer *r, int shader_mode){
             //for every triangle in the object
             Triangle t = triangles[tr];
             
-            //Tell the triangles to project themselves into the view plane
-            t.project();
-            
             v3 color1 = v3 (0, 0, 1);
             v3 color2 = v3 (1, 0, 0);
+            v3 white = v3(1, 1, 1);
 //            r->set_pixel((int)round(t.p1.x)-2, (int)round(t.p1.y)+2, color1);
 //            r->set_pixel((int)round(t.p2.x)+1, (int)round(t.p2.y)+1, color2);
 //            r->set_pixel((int)round(t.p3.x)-1, (int)round(t.p3.y)-1, v3(0, 1, 0));
@@ -86,9 +84,12 @@ void Room::draw(Renderer *r, int shader_mode){
                         if ( std::abs(t.p1.z) <= depth[dex] )
                         {
                             depth[dex] = std::abs(t.p1.z);
+                            
                             if (shader_mode == 0){
-                                r->set_pixel(ix, jy, t.flat_color);
+                                r->set_pixel(ix, jy, white);
                             } else if (shader_mode == 1){
+                                r->set_pixel(ix, jy, t.flat_color);
+                            } else if (shader_mode == 2){
                                 v3 interp = Mesh::interpolate(p, t);
                                 v3 a = t.c1.Scale(interp.x);
                                 v3 b = t.c2.Scale(interp.y);
@@ -169,6 +170,17 @@ void Room::rasterize(Renderer *r, int shader_mode)
     {0,    0,    0,  1        }
     };
     this->transform(viewport);
+
+    /*
+     * Step 4 - project triangles into the viewplane
+     */
+    for (unsigned int i = 0; i < objs.size(); i++){
+        std::vector<Triangle> triangles = objs[i]->get_triangles();
+        for (unsigned int tr = 0; tr < triangles.size(); tr++){
+            Triangle t = triangles[tr];
+            t.project();
+        }
+    }
 
 }
 
