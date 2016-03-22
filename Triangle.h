@@ -23,6 +23,8 @@ public:
     std::string to_str();
     void set_neighbors(std::vector<v3> neighbors[3]);
     v3 point_norm(int dex);
+    //sets the point after we get to world space.
+    void mark_point();
     
     void project();
     
@@ -48,6 +50,10 @@ public:
     v3 c2;
     v3 c3;
     v3 flat_color;
+
+    v3 point_1;
+    v3 point_2;
+    v3 point_3;
 };
 
 #endif // TRIANGLE_H

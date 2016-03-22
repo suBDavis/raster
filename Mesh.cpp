@@ -187,6 +187,8 @@ void Mesh::shade(int shader_mode, std::vector<Light> *lights, v3 *camera){
     for(std::vector<Triangle>::iterator it = this->triangles.begin(); it != this->triangles.end(); ++it) {
         
         Triangle tri = *it;
+
+        it->mark_point();
         
         v3 flat_norm = it->get_ortho();
         v3 flat_vertex = it->p1.add(it->p2).add(it->p3).Scale(.33333333333);

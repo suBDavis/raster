@@ -61,12 +61,12 @@ void Triangle::transform(mat t_mat)
         p3 = p3.transform_4(t_mat);
         
         //we must also transform all the normals :)
-//        for (int i = 0; i< n1.size();i++)
-//            n1[i].transform_4(t_mat);
-//        for (int i = 0; i< n2.size();i++)
-//            n2[i].transform_4(t_mat);
-//        for (int i = 0; i< n3.size();i++)
-//            n3[i].transform_4(t_mat);
+       for (int i = 0; i< n1.size();i++)
+           n1[i].transform_4(t_mat);
+       for (int i = 0; i< n2.size();i++)
+           n2[i].transform_4(t_mat);
+       for (int i = 0; i< n3.size();i++)
+           n3[i].transform_4(t_mat);
 
     } else {
         //this is something else
@@ -94,3 +94,8 @@ std::string Triangle::to_str(){
     return ss.str();
 }
 
+void Triangle::mark_point(){
+    point_1 = p1;
+    point_2 = p2;
+    point_3 = p3;
+}
