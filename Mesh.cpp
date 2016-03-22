@@ -130,7 +130,7 @@ std::vector<Triangle> Mesh::load_from_file(const char* path){
 
         size_t indexOffset = 0;
         for (size_t n = 0; n < shapes[i].mesh.num_vertices.size(); n++) {
-            int ngon = shapes[i].mesh.num_vertices[n];
+            unsigned int ngon = shapes[i].mesh.num_vertices[n];
             for (size_t f = 0; f < ngon; f++) {
                 unsigned int v = shapes[i].mesh.indices[indexOffset + f];
 //                printf("  face[%ld] v[%ld] = (%f, %f, %f)\n", n,

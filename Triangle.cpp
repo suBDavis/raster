@@ -48,9 +48,9 @@ v3 Triangle::point_norm(int dex){
     return norm;   
 }
 
-v3 Triangle::get_point_above(v3 *point){}
+v3 Triangle::get_point_above(v3 *point){ return v3(0,0,0); }
 
-bool Triangle::is_reflective(){}
+bool Triangle::is_reflective(){ return true; }
 
 void Triangle::transform(mat t_mat)
 {

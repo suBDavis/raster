@@ -39,8 +39,8 @@ void Room::draw(Renderer *r, int shader_mode){
     const int numcols = r->getWidth();
     double depth[numrows * numcols];
     
-    for (unsigned int col = 0; col < numcols; col++)
-        for (unsigned int row = 0; row < numrows; row++)
+    for (int col = 0; col < numcols; col++)
+        for (int row = 0; row < numrows; row++)
             depth[numcols * row + col] = std::abs(f);
 
     for (unsigned int i = 0; i < objs.size(); i++)
@@ -69,9 +69,9 @@ void Room::draw(Renderer *r, int shader_mode){
             int maxy = std::max({(int)t.p1.y, (int)t.p2.y, (int)t.p3.y});
             
             //For now we can assume the triangle is within the box.
-            for (unsigned int jy = miny; jy <= maxy; jy++)
+            for (int jy = miny; jy <= maxy; jy++)
             {
-                for (unsigned int ix = minx; ix <= maxx; ix++)
+                for (int ix = minx; ix <= maxx; ix++)
                 {
                     //for every pixel in the bounding box
                     v3 p = v3(ix, jy, 0);
@@ -154,7 +154,7 @@ void Room::rasterize(Renderer *r, int shader_mode)
      */ 
      
     v3 camera = v3 (cam[12], cam[13], cam[14]);
-    for (int i = 0; i < this->objs.size(); i++){
+    for (unsigned int i = 0; i < this->objs.size(); i++){
         objs[i]->shade(shader_mode, &lights, &camera);
     }
     

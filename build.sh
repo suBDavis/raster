@@ -1,10 +1,13 @@
 #!/bin/bash
-
+echo "<<============================================================>>"
+echo "    Began compiling at $(date)"
+echo "    Please allow 30-60 seconds for compile"
 mkdir -p Build
 mkdir -p Images
 
 args=$1
-FLAGSBEGIN="-g -O3 -Wall -std=c++0x -o"
+args="all"
+FLAGSBEGIN="-g -O0 -Wall -std=c++0x -o"
 FLAGSEND="-I. -larmadillo"
 
 if [ "$args" = "all" ]; then
@@ -24,7 +27,8 @@ fi
 g++ -o ./Build/Rasterize ./Build/main.cpp.o ./Build/Mesh.cpp.o ./Build/Triangle.cpp.o ./Build/v3.cpp.o ./Build/Phong.cpp.o ./Build/Room.cpp.o ./Build/Light.cpp.o ./Build/Ray.cpp.o ./Build/Renderer.cpp.o -L. $FLAGSEND
 
 echo "<<============================================================>>"
-echo "   Build completed"
+echo "   Build completed! Time to build: $(date)"
 echo "   If the build was successful, you may run ./run.sh"
 echo "   If there were errors, please retry on ubuntu-based linux"
+echo "   or make sure you fulfilled the build requirements"
 echo "<<============================================================>>"
