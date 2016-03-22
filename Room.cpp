@@ -108,6 +108,7 @@ void Room::draw(Renderer *r, int shader_mode){
                                 v3 pb = t.point_2.Scale(interp.y);
                                 v3 pc = t.point_3.Scale(interp.z);
                                 v3 vertex = pa.add(pb).add(pc);
+                                vertex = v3(ix, jy, 1);
 
 
                                 v3 a = t.point_norm(0).Scale(interp.x);
@@ -214,6 +215,6 @@ void Room::transform(mat44 trans)
     for(unsigned int i = 0; i < objs.size(); i++)
         objs[i]->transform(&trans);
         
-//    for(unsigned int i = 0; i < lights.size(); i++)
-//        lights[i].transform(trans);
+    for(unsigned int i = 0; i < lights.size(); i++)
+        lights[i].transform(trans);
 }
