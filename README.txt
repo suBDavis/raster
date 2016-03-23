@@ -37,3 +37,33 @@
 |   + OpenGL is NOT required.
 |
 ======================================= Description of Parts ====================================
+| 
+| Main:
+|     * Creates the room, the spheres, and puts them into worldspace.
+|     * Specifies the shading type.
+| 
+| Mesh:
+|    * code for shading a mesh (given lights, a point, and a normal)
+|    * unit sphere generation code, since it produces a Mesh object
+|    * Transform method - takes 44 matrix and applies it on all triangles in the mesh
+|    * Each mesh has its own phong properties.
+|
+| Room:
+|    * Contains the main rasterization code, including the transfom pipeline and actual rasterization code
+|    * Does edge function computation
+|    * Contains top level transform funciton, which transforms all lights and meshes in the room
+|
+| Triangle:
+|    * Contains the actual code to do a transform.
+|    * Contains 3 v3's that correspond to the 3 triangle points
+|    * Contains 3 c++ std::vectors of normals that are used to compute the vertex normals
+| 
+| v3:
+|    * Base vector class
+|    * implements vector/matrix transforms using armadillo library
+|
+| Renderer:
+|    * pixel color array buffer
+|    * Code for gamma correction, applied when the image is written to file
+|
+================================================================================================
